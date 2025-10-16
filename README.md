@@ -10,6 +10,14 @@ description: Complete documentation for Proxmox MCP Server implementation
 
 # Proxmox MCP Server - Clean Implementation
 
+## 🎬 Project History
+
+Just a few months ago (May 2025, to be exact), we kicked off our first Model Context Protocol (MCP) server for Proxmox in the original ProxmoxMCP repo. It was loaded with features, FastMCP, FastAPI, and enough virtual environments to make your head spin. But hey, times change—and so do we!
+
+Now, we’re rolling out ProxmoxEmCP: a fresh, clean rebuild. No more complicated setup, no more FastMCP or FastAPI, and absolutely zero venv drama. Everything lives happily in the root of the container, ready to roll.
+
+We’re excited to build on this new platform and keep things fun, simple, and open for the community. The Dude abides.
+
 A containerized MCP (Model Context Protocol) server for managing Proxmox VE through AI assistants. This implementation uses the official MCP SDK and runs in Docker without virtual environments.
 
 ## Features
@@ -139,7 +147,7 @@ python mcp_server.py
 
 Since configuration is via environment variables, you can:
 
-1. **Update and restart the container:**
+**Update and restart the container:**
 
 ```bash
 docker-compose down
@@ -147,7 +155,7 @@ docker-compose down
 docker-compose up -d
 ```
 
-2. **Or use docker exec to check/modify:**
+**Or use docker exec to check/modify:**
 
 ```bash
 docker exec -it proxmox-mcp /bin/bash
