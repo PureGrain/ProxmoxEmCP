@@ -166,7 +166,7 @@ See the included `settings.example.json` file for a ready-to-edit template.
 - `get_nodes` - List all nodes in the cluster
 - `get_node_status` - Get detailed status for a specific node
 
-### VM Operations  
+### VM Operations
 
 - `get_vms` - List all VMs across the cluster
 - `get_vm_status` - Get VM status and configuration
@@ -295,6 +295,35 @@ To modify or extend the server:
 1. Edit `mcp_server.py` with your changes
 2. Rebuild the Docker image: `docker-compose build`
 3. Restart the container: `docker-compose up -d`
+
+## 🛠️ Development & Contribution
+
+### Pre-commit Hooks (Linting & Secrets)
+
+This project uses [pre-commit](https://pre-commit.com/) to automate code style, linting, and secrets scanning before every commit.
+
+**To set up pre-commit hooks locally:**
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+**To run all hooks manually:**
+
+```bash
+pre-commit run --all-files
+```
+
+Hooks include:
+- `black` (Python code formatter)
+- `flake8` (Python linter)
+- `detect-secrets` (secret scanning)
+- Common whitespace and YAML checks
+
+If a hook fails, fix the reported issues and re-commit.
+
+See `.pre-commit-config.yaml` for details.
 
 ## License
 
