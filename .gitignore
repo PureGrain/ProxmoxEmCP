@@ -1,0 +1,50 @@
+# title: Proxmox MCP Git Ignore Configuration
+# author: PureGrain at SLA Ops, LLC
+# author_url: https://github.com/PureGrain
+# repo_url: https://github.com/PureGrain/ProxmoxMCP
+# version: 2.0.0
+# license: MIT
+# description: Git ignore patterns for Proxmox MCP Server project
+
+# Environment configuration
+.env
+*.env
+!.env.example
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+
+# Logs
+*.log
+logs/
+
+# Docker volumes
+data/
+volumes/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Testing
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
