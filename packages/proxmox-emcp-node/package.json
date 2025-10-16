@@ -1,0 +1,11 @@
+{
+  "name": "@puregrain/proxmox-emcp-node",
+  "version": "0.1.0",
+  "description": "Node.js wrapper to launch the ProxmoxEmCP Docker image as an MCP server.",
+  "bin": {
+    "proxmox-emcp-node": "cli.js"
+  },
+  "author": "PureGrain at SLA Ops, LLC",
+  "license": "MIT",
+  "dependencies": {}
+}

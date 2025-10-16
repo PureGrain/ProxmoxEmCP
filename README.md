@@ -15,8 +15,7 @@ description: Complete documentation for Proxmox MCP Server implementation
 Just a few months ago (May 2025, to be exact), we kicked off our first Model Context Protocol (MCP) server for Proxmox in the original ProxmoxMCP repo. It was loaded with features, FastMCP, FastAPI, and enough virtual environments to make your head spin. But hey, times change, and so do we!
 
 Now, we’re rolling out ProxmoxEmCP: a fresh, clean rebuild. No more complicated setup, no more FastMCP or FastAPI, and absolutely zero venv drama. Everything lives happily in the root of the container, ready to roll.
-
-We’re excited to build on this new platform and keep things fun, simple, and open for the community. The Dude abides.
+# repo_url: https://github.com/PureGrain/ProxmoxEmCP
 
 A containerized MCP (Model Context Protocol) server for managing Proxmox VE through AI assistants. This implementation uses the official MCP SDK and runs in Docker without virtual environments.
 
@@ -121,6 +120,34 @@ Configure your AI assistant (Claude, Cline, etc.) to use the MCP server:
   }
 }
 ```
+
+## 🤖 AI Agent Integration
+
+To connect an AI agent (like Claude, Cline, or any MCP-compatible orchestrator) to your ProxmoxEmCP server, use a settings.json like this:
+
+```json
+{
+  "mcpServers": {
+    "proxmox": {
+      "image": "puregrain/proxmox-emcp:latest",
+      "env": {
+        "PROXMOX_HOST": "192.168.1.100",
+        "PROXMOX_TOKEN_NAME": "your-token-name",
+        "PROXMOX_TOKEN_VALUE": "your-token-value",
+        "PROXMOX_USER": "root@pam",
+        "PROXMOX_VERIFY_SSL": "false",
+        "LOG_LEVEL": "INFO"
+      }
+    }
+  }
+}
+```
+
+- Replace the values with your actual Proxmox credentials.
+- The env block passes environment variables to the container at launch.
+- The image field tells the orchestrator which Docker image to use.
+
+See the included `settings.example.json` file for a ready-to-edit template.
 
 ## Creating Proxmox API Token
 
