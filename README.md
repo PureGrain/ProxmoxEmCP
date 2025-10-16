@@ -12,7 +12,7 @@ description: Complete documentation for Proxmox MCP Server implementation
 
 ## 🎬 Project History
 
-Just a few months ago (May 2025, to be exact), we kicked off our first Model Context Protocol (MCP) server for Proxmox in the original ProxmoxMCP repo. It was loaded with features, FastMCP, FastAPI, and enough virtual environments to make your head spin. But hey, times change—and so do we!
+Just a few months ago (May 2025, to be exact), we kicked off our first Model Context Protocol (MCP) server for Proxmox in the original ProxmoxMCP repo. It was loaded with features, FastMCP, FastAPI, and enough virtual environments to make your head spin. But hey, times change, and so do we!
 
 Now, we’re rolling out ProxmoxEmCP: a fresh, clean rebuild. No more complicated setup, no more FastMCP or FastAPI, and absolutely zero venv drama. Everything lives happily in the root of the container, ready to roll.
 
@@ -28,6 +28,56 @@ A containerized MCP (Model Context Protocol) server for managing Proxmox VE thro
 - 🚀 Simple setup and deployment
 - 📦 Lightweight and efficient
 - 🔧 Full Proxmox VE management capabilities
+
+## 🚀 Using from Docker Hub or GitHub Container Registry
+
+You can run ProxmoxEmCP directly from Docker Hub or GitHub Container Registry (GHCR) without cloning the repo.
+
+### Docker Hub
+
+Pull the image:
+
+```bash
+docker pull puregrain/proxmox-emcp:latest
+```
+
+Run the container (replace values with your actual credentials):
+
+```bash
+docker run -d \
+  --name proxmox-emcp \
+  -e PROXMOX_HOST="192.168.1.100" \
+  -e PROXMOX_TOKEN_NAME="your-token-name" \
+  -e PROXMOX_TOKEN_VALUE="your-token-value" \
+  puregrain/proxmox-emcp:latest
+```
+
+### GitHub Container Registry (GHCR)
+
+Pull the image:
+
+```bash
+docker pull ghcr.io/puregrain/proxmox-emcp:latest
+```
+
+Run the container (same as above, just change the image name):
+
+```bash
+docker run -d \
+  --name proxmox-emcp \
+  -e PROXMOX_HOST="192.168.1.100" \
+  -e PROXMOX_TOKEN_NAME="your-token-name" \
+  -e PROXMOX_TOKEN_VALUE="your-token-value" \
+  ghcr.io/puregrain/proxmox-emcp:latest
+```
+
+### Required Environment Variables
+
+- `PROXMOX_HOST`: Your Proxmox server IP/hostname (e.g., 192.168.1.100)
+- `PROXMOX_TOKEN_NAME`: API token name from Proxmox
+- `PROXMOX_TOKEN_VALUE`: API token value from Proxmox
+
+You can also use a `.env` file and Docker Compose for easier management. See below for more details.
 
 ## Quick Start
 
