@@ -1,5 +1,0 @@
-{
-  "dependencies": {
-    "@puregrain/proxmox-emcp-node": "file:../.."
-  }
-}

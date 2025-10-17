@@ -1,11 +1,16 @@
 {
   "name": "@puregrain/proxmox-emcp-node",
-  "version": "0.2.1",
-  "description": "Node.js wrapper to launch the ProxmoxEmCP Docker image as an MCP server.",
+  "version": "0.3.0",
+  "description": "Native Node.js MCP server for Proxmox VE. Implements Model Context Protocol and connects directly to Proxmox API.",
+  "main": "dist/index.js",
   "bin": {
-    "proxmox-emcp-node": "cli.js"
+    "proxmox-emcp-node": "dist/index.js"
   },
   "author": "PureGrain at SLA Ops, LLC",
   "license": "MIT",
-  "dependencies": {}
+  "type": "module",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.20.1",
+    "axios": "^1.6.0"
+  }
 }

@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "proxmox": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "-e", "PROXMOX_HOST=192.168.1.100",
+        "-e", "PROXMOX_TOKEN_NAME=your-token-name",
+        "-e", "PROXMOX_TOKEN_VALUE=your-token-value",
+        "-e", "PROXMOX_USER=root@pam",
+        "-e", "PROXMOX_VERIFY_SSL=false",
+        "-e", "LOG_LEVEL=INFO",
+        "puregrain/proxmox-emcp:latest"
+      ]
+    }
+  }
+}

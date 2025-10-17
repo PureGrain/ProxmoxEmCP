@@ -26,9 +26,15 @@ const dockerArgs = [
 ];
 
 const docker = spawn('docker', dockerArgs, {
-  stdio: 'inherit',
+  stdio: ['pipe', 'pipe', 'inherit'], // stdin and stdout piped, stderr inherited
   env: process.env
 });
+
+// Pipe stdin to docker
+process.stdin.pipe(docker.stdin);
+
+// Pipe docker stdout to stdout
+docker.stdout.pipe(process.stdout);
 
 docker.on('exit', (code) => {
   process.exit(code);
