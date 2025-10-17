@@ -10,12 +10,18 @@ description: Complete documentation for Proxmox MCP Server implementation
 
 # Proxmox MCP Server - Clean Implementation
 
+[![CI](https://github.com/PureGrain/ProxmoxEmCP/actions/workflows/ci.yml/badge.svg)](https://github.com/PureGrain/ProxmoxEmCP/actions/workflows/ci.yml)
+[![Docker Pulls](https://img.shields.io/docker/pulls/puregrain/proxmox-emcp?logo=docker)](https://hub.docker.com/r/puregrain/proxmox-emcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Security: Dependabot](https://img.shields.io/badge/dependabot-enabled-brightgreen?logo=dependabot)](https://github.com/PureGrain/ProxmoxEmCP/security/dependabot)
+
 ## 🎬 Project History
 
 Just a few months ago (May 2025, to be exact), we kicked off our first Model Context Protocol (MCP) server for Proxmox in the original ProxmoxMCP repo. It was loaded with features, FastMCP, FastAPI, and enough virtual environments to make your head spin. But hey, times change, and so do we!
 
 Now, we’re rolling out ProxmoxEmCP: a fresh, clean rebuild. No more complicated setup, no more FastMCP or FastAPI, and absolutely zero venv drama. Everything lives happily in the root of the container, ready to roll.
-# repo_url: https://github.com/PureGrain/ProxmoxEmCP
+
+[repo_url: ProxmoxEmCP](https://github.com/PureGrain/ProxmoxEmCP)
 
 A containerized MCP (Model Context Protocol) server for managing Proxmox VE through AI assistants. This implementation uses the official MCP SDK and runs in Docker without virtual environments.
 
@@ -316,6 +322,7 @@ pre-commit run --all-files
 ```
 
 Hooks include:
+
 - `black` (Python code formatter)
 - `flake8` (Python linter)
 - `detect-secrets` (secret scanning)
