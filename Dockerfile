@@ -5,7 +5,7 @@
 # license: MIT
 # description: Docker container for Proxmox MCP Server using official MCP SDK
 
-FROM python:3.13-slim
+FROM python:3.14-slim
 
 # Create non-root user for security
 RUN groupadd -r mcp && useradd -r -g mcp -m -d /home/mcp -s /bin/bash mcp
@@ -44,3 +44,8 @@ USER mcp
 
 # Run the MCP server with stdio transport (default for MCP compatibility)
 CMD ["python", "mcp_server_stdio.py"]
+
+# Add supply chain attestation metadata
+LABEL org.opencontainers.image.source="https://github.com/PureGrain/ProxmoxEmCP"
+LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.vendor="PureGrain at SLA Ops, LLC"
