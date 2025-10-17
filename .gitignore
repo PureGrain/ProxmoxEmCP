@@ -48,3 +48,9 @@ htmlcov/
 build/
 dist/
 *.egg-info/
+
+# Node.js
+node_modules/
+
+# Internal publishing docs
+PUBLISHING.internal.md
