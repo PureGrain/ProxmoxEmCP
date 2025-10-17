@@ -75,10 +75,12 @@ const vms = await proxmox.getVMs();
 The ProxmoxEmCP server exposes the following tools:
 
 ### Node Operations
+
 - `get_nodes` - List all nodes in the cluster
 - `get_node_status` - Get detailed status for a specific node
 
 ### VM Operations
+
 - `get_vms` - List all VMs across the cluster
 - `get_vm_status` - Get status and configuration for a specific VM
 - `start_vm` - Start a virtual machine
@@ -89,6 +91,7 @@ The ProxmoxEmCP server exposes the following tools:
 - `list_vm_snapshots` - List all snapshots for a VM
 
 ### Storage & Cluster
+
 - `get_storage` - List storage pools in the cluster
 - `get_cluster_status` - Get cluster status and health information
 - `get_task_status` - Get status of a Proxmox task
@@ -110,11 +113,18 @@ The ProxmoxEmCP server exposes the following tools:
 
 ## Changelog
 
+### v0.3.6 (2025-10-17)
+
+- Updated version to 0.3.6
+- Fixed version consistency issues in `check-version.js`
+
 ### v0.3.4 (2024-12-17)
+
 - Added automatic version consistency checks
 - Added publishing safeguards to prevent version mismatches
 
 ### v0.3.3 (2024-12-17)
+
 - Complete rewrite as native Node.js implementation
 - Removed Docker dependency
 - Added comprehensive Proxmox API coverage
@@ -122,6 +132,7 @@ The ProxmoxEmCP server exposes the following tools:
 - Updated MCP SDK to ^1.18.0
 
 ### v0.3.2 and earlier
+
 - Docker wrapper implementation (deprecated)
 
 ## License
@@ -134,5 +145,5 @@ PureGrain at SLA Ops, LLC
 
 ## Support
 
-- GitHub Issues: https://github.com/PureGrain/ProxmoxEmCP/issues
-- Buy me a coffee: https://buymeacoffee.com/puregrain
+- [GitHub Issues](https://github.com/PureGrain/ProxmoxEmCP/issues)
+- [Buy me a coffee](https://buymeacoffee.com/puregrain)
