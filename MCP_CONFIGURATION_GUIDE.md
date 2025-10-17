@@ -74,7 +74,7 @@ This error occurs when the orchestrator is configured for Windows but running on
   "mcpServers": {
     "proxmox": {
       "command": "python",
-      "args": ["path/to/ProxmoxEmCP/mcp_server.py"],
+      "args": ["path/to/ProxmoxEmCP/mcp_server_stdio.py"],
       "env": {
         "PROXMOX_HOST": "192.168.1.100",
         "PROXMOX_TOKEN_NAME": "your-token-name",

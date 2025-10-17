@@ -1,12 +1,12 @@
 {
   "mcpServers": {
-    "proxmox": {
-      "command": "python",
-      "args": ["mcp_server.py"],
+    "proxmox-local": {
+      "command": "npx",
+      "args": ["@puregrain/proxmox-emcp-node"],
       "env": {
         "PROXMOX_HOST": "192.168.1.100",
-        "PROXMOX_TOKEN_NAME": "your-token-name",
-        "PROXMOX_TOKEN_VALUE": "your-token-value",
+        "PROXMOX_TOKEN_NAME": "test-token",
+        "PROXMOX_TOKEN_VALUE": "test-token-value",
         "PROXMOX_USER": "root@pam",
         "PROXMOX_VERIFY_SSL": "false",
         "LOG_LEVEL": "INFO"

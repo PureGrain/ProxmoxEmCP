@@ -212,7 +212,12 @@ pip install -r requirements.txt
 export PROXMOX_HOST=192.168.1.100
 export PROXMOX_TOKEN_NAME=your-token
 export PROXMOX_TOKEN_VALUE=your-token-value
-python mcp_server.py
+
+# For MCP clients (Claude Desktop, MCPO, etc.) - uses stdio transport
+python mcp_server_stdio.py
+
+# For HTTP API access (standalone REST API) - uses HTTP transport
+# python mcp_server_http.py  # Available but not primary
 ```
 
 ## Environment Variables
@@ -298,9 +303,11 @@ docker logs proxmox-mcp
 
 To modify or extend the server:
 
-1. Edit `mcp_server.py` with your changes
+1. Edit `mcp_server_stdio.py` (for MCP clients) or `mcp_server_http.py` (for HTTP API)
 2. Rebuild the Docker image: `docker-compose build`
 3. Restart the container: `docker-compose up -d`
+
+**Note:** The Docker container uses `mcp_server_stdio.py` by default for MCP compatibility.
 
 ## 🛠️ Development & Contribution
 

@@ -1,1 +1,53 @@
+# Internal documentation
 PUBLISHING.internal.md
+
+# Source files (if any exist in future)
+src/
+*.ts
+!*.d.ts
+tsconfig.json
+
+# Development files
+.gitignore
+.npmignore
+.eslintrc*
+.prettierrc*
+
+# Test files
+test/
+tests/
+*.test.js
+*.spec.js
+
+# Build artifacts (no longer used)
+dist/
+
+# Dependencies (shouldn't be in npm package)
+node_modules/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git files
+.git/
+.github/
+
+# Temporary files
+*.tmp
+temp/
+tmp/
+
+# Environment files
+.env
+.env.*
+
+# Package artifacts
+*.tgz
+npm-debug.log*

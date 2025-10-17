@@ -1,16 +1,13 @@
 {
   "name": "@puregrain/proxmox-emcp-node",
-  "version": "0.3.1",
-  "description": "Native Node.js MCP server for Proxmox VE. Implements Model Context Protocol and connects directly to Proxmox API.",
-  "main": "dist/index.js",
+  "version": "0.3.2",
+  "description": "Docker-based MCP server for Proxmox VE. Wraps the Proxmox MCP Docker container for use with npx.",
+  "main": "cli.cjs",
   "bin": {
-    "proxmox-emcp-node": "dist/index.js"
+    "proxmox-emcp-node": "cli.cjs"
   },
   "author": "PureGrain at SLA Ops, LLC",
   "license": "MIT",
-  "type": "module",
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.20.1",
-    "axios": "^1.6.0"
-  }
+  "type": "commonjs",
+  "dependencies": {}
 }

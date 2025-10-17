@@ -20,8 +20,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the MCP server
-COPY mcp_server.py .
+# Copy the MCP server (stdio version - primary)
+COPY mcp_server_stdio.py .
+
+# Optional: Copy HTTP version for users who need it
+# COPY mcp_server_http.py .
 
 # Set environment variables (can be overridden at runtime)
 ENV PYTHONUNBUFFERED=1
@@ -31,5 +34,5 @@ ENV LOG_LEVEL=INFO
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD python -c "import mcp; import proxmoxer; print('OK')" || exit 1
 
-# Run the MCP server
-CMD ["python", "mcp_server.py"]
+# Run the MCP server with stdio transport (default for MCP compatibility)
+CMD ["python", "mcp_server_stdio.py"]

@@ -26,16 +26,26 @@ const dockerArgs = [
 ];
 
 const docker = spawn('docker', dockerArgs, {
-  stdio: ['pipe', 'pipe', 'inherit'], // stdin and stdout piped, stderr inherited
+  stdio: ['pipe', 'pipe', 'pipe'], // stdin, stdout, and stderr all piped
   env: process.env
 });
 
-// Pipe stdin to docker
+// Handle stdin
 process.stdin.pipe(docker.stdin);
 
-// Pipe docker stdout to stdout
+// Handle stdout
 docker.stdout.pipe(process.stdout);
 
+// Handle stderr - pipe to stderr instead of inheriting
+docker.stderr.pipe(process.stderr);
+
+// Handle docker exit
 docker.on('exit', (code) => {
-  process.exit(code);
+  process.exit(code || 0);
+});
+
+// Handle errors
+docker.on('error', (err) => {
+  console.error('Failed to start Docker container:', err);
+  process.exit(1);
 });
