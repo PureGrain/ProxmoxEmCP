@@ -90,7 +90,7 @@ You can also use a `.env` file and Docker Compose for easier management. See bel
 
 ```bash
 git clone <repository>
-cd ProxmoxMCP-Clean
+cd ProxmoxEmCP
 ```
 
 ### 2. Configure Environment Variables
