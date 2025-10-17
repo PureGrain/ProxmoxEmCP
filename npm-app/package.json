@@ -1,6 +1,6 @@
 {
   "name": "@puregrain/proxmox-emcp-node",
-  "version": "0.3.4",
+  "version": "0.3.6",
   "description": "Native Node.js ProxmoxEmCP server using Model Context Protocol for Proxmox VE management.",
   "main": "index.js",
   "type": "module",
