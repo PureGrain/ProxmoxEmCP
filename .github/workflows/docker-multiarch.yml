@@ -35,10 +35,37 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push multi-arch image
+      - name: Build and push multi-arch image with attestations
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: puregrain/proxmox-emcp:latest
           platforms: linux/amd64,linux/arm64
+          # Generate SBOM and provenance attestations
+          sbom: true
+          provenance: mode=max
+
+      # Docker Scout Analysis
+      - name: Docker Scout CVE scan
+        uses: docker/scout-action@v1
+        with:
+          command: cves
+          image: puregrain/proxmox-emcp:latest
+          sarif-file: docker-scout-cves.sarif
+          summary: true
+
+      - name: Upload Scout results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: docker-scout-cves.sarif
+
+      - name: Docker Scout comparison
+        uses: docker/scout-action@v1
+        with:
+          command: compare
+          image: puregrain/proxmox-emcp:latest
+          to: puregrain/proxmox-emcp:latest
+          exit-code: false
+          summary: true
