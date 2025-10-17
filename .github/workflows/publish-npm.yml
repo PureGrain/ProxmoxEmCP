@@ -3,7 +3,7 @@ name: Publish proxmox-emcp-node to npm
 on:
   push:
     paths:
-      - 'packages/proxmox-emcp-node/**'
+      - 'npm-app/**'
     branches: [main]
   workflow_dispatch:
 
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: packages/proxmox-emcp-node
+        working-directory: npm-app
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
