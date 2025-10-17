@@ -2,7 +2,6 @@
 # author: PureGrain at SLA Ops, LLC
 # author_url: https://github.com/PureGrain
 # repo_url: https://github.com/PureGrain/ProxmoxEmCP
-# version: 2.0.0
 # license: MIT
 # description: Docker Compose setup for Proxmox MCP Server deployment
 
@@ -18,16 +17,16 @@ services:
       - PROXMOX_HOST=${PROXMOX_HOST:-192.168.1.100}
       - PROXMOX_TOKEN_NAME=${PROXMOX_TOKEN_NAME}
       - PROXMOX_TOKEN_VALUE=${PROXMOX_TOKEN_VALUE}
-      
+
       # Optional configuration
       - PROXMOX_USER=${PROXMOX_USER:-root@pam}
       - PROXMOX_VERIFY_SSL=${PROXMOX_VERIFY_SSL:-false}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
-    
+
     # MCP uses stdio, so we need interactive mode
     stdin_open: true
     tty: true
-    
+
     # Optional: Mount logs to host
     volumes:
       - ./logs:/app/logs

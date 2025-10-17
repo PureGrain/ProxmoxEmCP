@@ -4,7 +4,6 @@ title: Proxmox MCP Server (STDIO)
 author: PureGrain at SLA Ops, LLC
 author_url: https://github.com/PureGrain
 repo_url: https://github.com/PureGrain/ProxmoxMCP
-version: 2.0.0
 license: MIT
 description: MCP server for managing and monitoring Proxmox VMs and nodes using stdio transport.
 """
