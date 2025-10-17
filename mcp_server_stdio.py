@@ -253,12 +253,17 @@ class ProxmoxManager:
 
 async def run_mcp_server():
     """Run the MCP server with stdio transport."""
-    # Initialize Proxmox manager
+    # Initialize Proxmox manager - but handle errors gracefully
+    proxmox = None
+    initialization_error = None
+
     try:
         proxmox = ProxmoxManager()
+        logger.info("Successfully initialized Proxmox connection")
     except Exception as e:
         logger.error(f"Failed to initialize Proxmox connection: {e}")
-        sys.exit(1)
+        initialization_error = str(e)
+        # Don't exit - let the MCP server run and report the error through the protocol
 
     # Create MCP server
     server = Server("ProxmoxMCP")
@@ -439,6 +444,22 @@ async def run_mcp_server():
     async def call_tool(name: str, arguments: Dict[str, Any]) -> List[TextContent]:
         """Handle MCP tool calls."""
         try:
+            # Check if initialization failed
+            if proxmox is None:
+                error_msg = initialization_error or "Proxmox connection not initialized"
+                return [
+                    TextContent(
+                        type="text",
+                        text=json.dumps(
+                            {
+                                "error": f"Server initialization failed: {error_msg}",
+                                "details": "Please check environment variables and server configuration",
+                            },
+                            indent=2,
+                        ),
+                    )
+                ]
+
             result = None
 
             # Route tool calls to appropriate methods
@@ -485,7 +506,10 @@ async def run_mcp_server():
 
     # Run the server with stdio transport
     logger.info("Starting Proxmox MCP Server (STDIO)...")
-    logger.info(f"Connected to Proxmox host: {os.getenv('PROXMOX_HOST')}")
+    if proxmox:
+        logger.info(f"Connected to Proxmox host: {os.getenv('PROXMOX_HOST')}")
+    else:
+        logger.warning("Running in degraded mode - Proxmox connection failed")
 
     # Use stdio_server for MCP communication
     async with stdio_server() as (read_stream, write_stream):
@@ -513,7 +537,9 @@ def main():
         logger.info("  PROXMOX_USER - (Optional) User, defaults to root@pam")
         logger.info("  PROXMOX_VERIFY_SSL - (Optional) Verify SSL, defaults to false")
         logger.info("  LOG_LEVEL - (Optional) Log level, defaults to INFO")
-        sys.exit(1)
+
+        # Don't exit immediately - run the server anyway to report errors through MCP protocol
+        # The server will run in a degraded mode and report initialization errors
 
     try:
         asyncio.run(run_mcp_server())
@@ -521,6 +547,9 @@ def main():
         logger.info("Server stopped by user")
     except Exception as e:
         logger.error(f"Server error: {e}")
+        import traceback
+
+        traceback.print_exc(file=sys.stderr)
         sys.exit(1)
 
 
