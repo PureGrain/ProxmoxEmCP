@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run tests
+        run: |
+          pytest
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Docker image to Docker Hub
+        if: success()
+        run: |
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+          docker build -t puregrain/proxmox-emcp:${GITHUB_REF#refs/tags/v} .
+          docker push puregrain/proxmox-emcp:${GITHUB_REF#refs/tags/v}
+          docker tag puregrain/proxmox-emcp:${GITHUB_REF#refs/tags/v} puregrain/proxmox-emcp:latest
+          docker push puregrain/proxmox-emcp:latest
+        env:
+          DOCKER_CLI_EXPERIMENTAL: enabled
