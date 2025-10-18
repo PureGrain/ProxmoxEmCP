@@ -5,18 +5,18 @@
 # license: MIT
 # description: Docker container for Proxmox MCP Server using official MCP SDK
 
-FROM python:3.14-slim
+FROM python:3.14-alpine
 
 # Create non-root user for security
-RUN groupadd -r mcp && useradd -r -g mcp -m -d /home/mcp -s /bin/bash mcp
+RUN addgroup -S mcp && adduser -S -G mcp -h /home/mcp mcp
 
 # Set working directory
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apk update && apk add --no-cache \
     gcc \
-    && rm -rf /var/lib/apt/lists/*
+    gcompat
 
 # Copy requirements and install Python packages
 COPY requirements.txt .

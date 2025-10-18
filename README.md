@@ -349,3 +349,57 @@ For issues or questions:
 1. Check the troubleshooting section
 2. Review Proxmox API documentation
 3. Verify MCP protocol compatibility
+
+# Proxmox MCP Server
+
+## Overview
+
+Proxmox MCP Server is a lightweight containerized application for managing and monitoring Proxmox VMs and nodes using the official MCP SDK.
+
+## Updates
+
+### Version 2.1.0
+
+- **Base Image**: Switched to Alpine (`python:3.14-alpine`) for reduced image size and improved security.
+
+- **Package Manager**: Replaced `apt-get` commands with `apk` equivalents.
+
+- **Environment Variables**:
+
+  - Required:
+
+    - `PROXMOX_HOST`: Proxmox server address (e.g., `192.168.1.100`).
+
+    - `PROXMOX_TOKEN_NAME`: API token name.
+
+    - `PROXMOX_TOKEN_VALUE`: API token value.
+
+  - Optional:
+
+    - `PROXMOX_USER`: Defaults to `root@pam`.
+
+    - `PROXMOX_VERIFY_SSL`: Defaults to `false`.
+
+    - `LOG_LEVEL`: Defaults to `INFO`.
+
+- **Port Mapping**: Default port is `8811`. Update the `docker run` command to map this port correctly.
+
+## Running the Container
+
+### Example Command
+
+```bash
+
+docker run --rm -p 8811:8811 --env-file .env proxmox-emcp
+
+```
+
+## Scout Health Score Improvements
+
+- Addressed issues with unapproved and outdated base images.
+
+- Enhanced supply chain security by using a non-root user and adding metadata.
+
+## Documentation
+
+Refer to the `.env` file for environment variable configuration.

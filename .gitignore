@@ -53,3 +53,9 @@ node_modules/
 
 # Internal publishing docs
 PUBLISHING.internal.md
+
+# hide the archive
+/archive
+
+# Ignore the Proxmox API overview document
+proxmox_api_overview.md

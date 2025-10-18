@@ -4,6 +4,7 @@ title: Proxmox MCP Server
 author: PureGrain at SLA Ops, LLC
 author_url: https://github.com/PureGrain
 repo_url: https://github.com/PureGrain/ProxmoxMCP
+funding_url: https://buymeacoffee.com/puregrain
 license: MIT
 description: MCP server for managing and monitoring Proxmox VMs and nodes using the official MCP SDK.
 """
