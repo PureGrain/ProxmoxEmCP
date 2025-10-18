@@ -2,6 +2,12 @@
 
 All notable changes to @puregrain/proxmox-emcp-node will be documented in this file.
 
+## [0.3.7] - 2025-10-17
+
+### Fixed
+
+- Updated version to 0.3.7
+
 ## [0.3.6] - 2025-10-17
 
 ### Fixed

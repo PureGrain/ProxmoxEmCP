@@ -113,9 +113,9 @@ The ProxmoxEmCP server exposes the following tools:
 
 ## Changelog
 
-### v0.3.6 (2025-10-17)
+### v0.3.7 (2025-10-17)
 
-- Updated version to 0.3.6
+- Updated version to 0.3.7
 - Fixed version consistency issues in `check-version.js`
 
 ### v0.3.4 (2024-12-17)

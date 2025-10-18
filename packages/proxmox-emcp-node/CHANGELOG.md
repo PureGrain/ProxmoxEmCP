@@ -19,4 +19,3 @@
   - Resolved unapproved and outdated base images.
 
   - Improved supply chain security by using a non-root user and adding metadata.
-  
