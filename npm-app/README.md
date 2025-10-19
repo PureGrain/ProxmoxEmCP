@@ -170,12 +170,14 @@ The ProxmoxEmCP server now exposes 35+ tools across multiple categories:
 ## Changelog
 
 ### v0.4.2 (2025-10-19)
+
 - Added `get_help` tool for comprehensive documentation
 - Provides structured documentation for all 32 available tools
 - Organized by categories with descriptions and usage examples
 - Enhanced tool discoverability for AI/LLM consumers
 
 ### v0.4.1 (2025-10-19)
+
 - Version bump to resolve npm publish conflict
 - No functional changes from v0.4.0
 

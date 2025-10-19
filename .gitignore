@@ -63,6 +63,7 @@ discussions/
 proxmox_api_overview.md
 proxmox_weaver_v2-0-2.py
 
-
-
 # End of .gitignore file
+
+npm-app/test-server.js
+npm-app/test-cli.js
