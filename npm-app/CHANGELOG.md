@@ -2,6 +2,20 @@
 
 All notable changes to @puregrain/proxmox-emcp-node will be documented in this file.
 
+## [0.4.2] - 2025-10-19
+
+### Added
+- **New `get_help` Tool** - Comprehensive help documentation system
+  - Returns structured documentation for all 32 available tools
+  - Organized by categories (Node, VM, Container, Storage, Cluster, Network, User Management)
+  - Includes usage examples and configuration requirements
+  - Provides visual icons for better readability
+  - Makes tool discovery explicit rather than AI-interpreted
+
+### Enhanced
+- Test suite now validates the help tool functionality
+- Better tool discoverability for AI/LLM consumers
+
 ## [0.4.1] - 2025-10-19
 
 ### Fixed

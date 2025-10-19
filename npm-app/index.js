@@ -5,7 +5,7 @@
  * author_url: https://github.com/PureGrain
  * repo_url: https://github.com/PureGrain/ProxmoxMCP
  * funding_url: https://github.com/sponsors/PureGrain
- * version: 0.4.1
+ * version: 0.4.2
  * license: MIT
  * description: Native Node.js ProxmoxEmCP server for managing and monitoring Proxmox VMs and nodes.
  */
@@ -938,6 +938,88 @@ class ProxmoxManager {
       return { error: error.message };
     }
   }
+
+  /**
+   * Generate help documentation for all available tools
+   */
+  async getHelp() {
+    return {
+      title: "ProxmoxEmCP Server - Available Tools",
+      description: "MCP server for managing and monitoring Proxmox VMs and nodes",
+      categories: {
+        "Node Management": [
+          { name: "get_nodes", description: "List all nodes in the cluster", icon: "📋" },
+          { name: "get_node_status", description: "Get detailed status for a specific node", icon: "📊" }
+        ],
+        "Virtual Machine Management": [
+          { name: "get_vms", description: "List all VMs across the cluster", icon: "📋" },
+          { name: "get_vm_status", description: "Get status and configuration for a specific VM", icon: "📊" },
+          { name: "start_vm", description: "Start a virtual machine", icon: "▶️" },
+          { name: "stop_vm", description: "Stop a virtual machine gracefully", icon: "⏹️" },
+          { name: "reboot_vm", description: "Reboot a virtual machine", icon: "🔄" },
+          { name: "execute_vm_command", description: "Execute a command in a VM via QEMU guest agent", icon: "💻" },
+          { name: "create_vm_snapshot", description: "Create a snapshot of a VM", icon: "📸" },
+          { name: "list_vm_snapshots", description: "List all snapshots for a VM", icon: "📋" }
+        ],
+        "Container Management": [
+          { name: "get_containers", description: "List all LXC containers across the cluster", icon: "📋" },
+          { name: "get_container_status", description: "Get status and configuration for a specific container", icon: "📊" },
+          { name: "start_container", description: "Start an LXC container", icon: "▶️" },
+          { name: "stop_container", description: "Stop an LXC container gracefully", icon: "⏹️" },
+          { name: "reboot_container", description: "Reboot an LXC container", icon: "🔄" },
+          { name: "execute_container_command", description: "Execute a command in a container", icon: "💻" },
+          { name: "create_container_snapshot", description: "Create a snapshot of a container", icon: "📸" },
+          { name: "list_container_snapshots", description: "List all snapshots for a container", icon: "📋" }
+        ],
+        "Storage & Backup": [
+          { name: "get_storage", description: "List storage pools in the cluster", icon: "💾" },
+          { name: "get_storage_details", description: "Get detailed information about a specific storage pool", icon: "📊" },
+          { name: "get_backups", description: "List backup files in storage", icon: "📋" },
+          { name: "list_templates", description: "List all VM and container templates available", icon: "📋" }
+        ],
+        "Cluster & Monitoring": [
+          { name: "get_cluster_status", description: "Get cluster status and health information", icon: "🏥" },
+          { name: "get_recent_tasks", description: "List recent tasks across the cluster", icon: "📋" },
+          { name: "get_task_status", description: "Get status of a Proxmox task", icon: "📊" },
+          { name: "get_cluster_log", description: "Get recent cluster log entries", icon: "📜" }
+        ],
+        "Network & Security": [
+          { name: "get_vm_network", description: "Get network configuration for a VM or container", icon: "🌐" },
+          { name: "get_firewall_status", description: "Get firewall status and rules for a node or VM", icon: "🔥" }
+        ],
+        "User & Access Control": [
+          { name: "get_users", description: "List all users in the Proxmox cluster", icon: "👥" },
+          { name: "get_groups", description: "List all groups in the Proxmox cluster", icon: "👥" },
+          { name: "get_roles", description: "List all roles available in the Proxmox cluster", icon: "🔐" }
+        ],
+        "Help & Documentation": [
+          { name: "get_help", description: "Display this help menu with all available tools", icon: "❓" }
+        ]
+      },
+      usage_examples: {
+        "List all nodes": "get_nodes",
+        "Check VM status": "get_vm_status with parameters: node='pve1', vmid=100",
+        "Start a VM": "start_vm with parameters: node='pve1', vmid=100",
+        "Create snapshot": "create_vm_snapshot with parameters: node='pve1', vmid=100, name='backup-2024'",
+        "Get cluster health": "get_cluster_status"
+      },
+      configuration: {
+        "Required environment variables": [
+          "PROXMOX_HOST - Your Proxmox server address (e.g., 192.168.1.100)",
+          "PROXMOX_TOKEN_ID - Your API token ID",
+          "PROXMOX_TOKEN_SECRET - Your API token secret"
+        ],
+        "Optional environment variables": [
+          "PROXMOX_USER - User, defaults to root@pam",
+          "PROXMOX_VERIFY_SSL - Verify SSL, defaults to false",
+          "LOG_LEVEL - Log level (DEBUG/INFO), defaults to INFO"
+        ]
+      },
+      version: "0.4.2",
+      author: "PureGrain at SLA Ops, LLC",
+      license: "MIT"
+    };
+  }
 }
 
 /**
@@ -1277,13 +1359,19 @@ async function runMCPServer() {
       name: 'list_templates',
       description: 'List all VM and container templates available in the cluster',
       inputSchema: { type: 'object', properties: {}, required: [] }
+    },
+    // Help & Documentation tool
+    {
+      name: 'get_help',
+      description: 'Display help menu with all available tools and their descriptions',
+      inputSchema: { type: 'object', properties: {}, required: [] }
     }
   ];
 
   // Create MCP server
   const server = new Server({
     name: 'ProxmoxEmCP',
-    version: '0.4.1'
+    version: '0.4.2'
   }, {
     capabilities: {
       tools: {}
@@ -1416,6 +1504,10 @@ async function runMCPServer() {
         // Template management
         case 'list_templates':
           result = await proxmox.listTemplates();
+          break;
+        // Help & Documentation
+        case 'get_help':
+          result = await proxmox.getHelp();
           break;
         default:
           result = { error: `Unknown tool: ${name}` };
