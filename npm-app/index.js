@@ -4,6 +4,7 @@
  * author: PureGrain at SLA Ops, LLC
  * author_url: https://github.com/PureGrain
  * repo_url: https://github.com/PureGrain/ProxmoxMCP
+ * funding_url: https://github.com/sponsors/PureGrain
  * version: 0.4.0
  * license: MIT
  * description: Native Node.js ProxmoxEmCP server for managing and monitoring Proxmox VMs and nodes.
@@ -690,7 +691,7 @@ class ProxmoxManager {
       for (const key in config) {
         if (key.startsWith('net')) {
           const netConfig = config[key];
-          const interface = { name: key, config: netConfig };
+          const netInterface = { name: key, config: netConfig };
 
           // Parse network configuration string
           if (typeof netConfig === 'string') {
@@ -698,12 +699,12 @@ class ProxmoxManager {
             for (const part of parts) {
               if (part.includes('=')) {
                 const [k, v] = part.split('=', 2);
-                interface[k] = v;
+                netInterface[k] = v;
               }
             }
           }
 
-          networkInfo.interfaces.push(interface);
+          networkInfo.interfaces.push(netInterface);
         }
       }
 

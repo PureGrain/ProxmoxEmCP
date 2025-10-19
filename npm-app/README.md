@@ -98,10 +98,12 @@ const vms = await proxmox.getVMs();
 The ProxmoxEmCP server now exposes 35+ tools across multiple categories:
 
 ### Node Operations
+
 - `get_nodes` - List all nodes in the cluster
 - `get_node_status` - Get detailed status for a specific node
 
 ### VM Operations
+
 - `get_vms` - List all VMs across the cluster
 - `get_vm_status` - Get status and configuration for a specific VM
 - `start_vm` - Start a virtual machine
@@ -112,6 +114,7 @@ The ProxmoxEmCP server now exposes 35+ tools across multiple categories:
 - `list_vm_snapshots` - List all snapshots for a VM
 
 ### Container Operations (NEW)
+
 - `get_containers` - List all LXC containers
 - `get_container_status` - Get container status and configuration
 - `start_container` - Start an LXC container
@@ -122,6 +125,7 @@ The ProxmoxEmCP server now exposes 35+ tools across multiple categories:
 - `list_container_snapshots` - List container snapshots
 
 ### Storage & Backup (ENHANCED)
+
 - `get_storage` - List storage pools in the cluster
 - `get_storage_details` - Detailed storage information with NFS support
 - `get_backups` - List and filter backup files
@@ -129,19 +133,23 @@ The ProxmoxEmCP server now exposes 35+ tools across multiple categories:
 - `get_task_status` - Get status of a Proxmox task
 
 ### User & Access Control (NEW)
+
 - `get_users` - List all users with groups and tokens
 - `get_groups` - List all groups with members
 - `get_roles` - List all available roles
 
 ### Network & Security (NEW)
+
 - `get_vm_network` - Get network configuration for VMs/containers
 - `get_firewall_status` - Get firewall rules and status
 
 ### Monitoring (NEW)
+
 - `get_recent_tasks` - List recent tasks with filtering
 - `get_cluster_log` - Get cluster-wide log entries
 
 ### Templates (NEW)
+
 - `list_templates` - List VM and container templates
 
 ## Creating a Proxmox API Token
