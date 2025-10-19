@@ -3,6 +3,7 @@ title: Proxmox MCP Server Documentation
 author: PureGrain at SLA Ops, LLC
 author_url: https://github.com/PureGrain
 repo_url: https://github.com/PureGrain/ProxmoxMCP
+funding_url: https://github.com/sponsors/PureGrain
 license: MIT
 description: Complete documentation for Proxmox MCP Server implementation
 -->
@@ -32,6 +33,11 @@ A containerized MCP (Model Context Protocol) server for managing Proxmox VE thro
 - 🚀 Simple setup and deployment
 - 📦 Lightweight and efficient
 - 🔧 Full Proxmox VE management capabilities
+- 🆕 LXC Container management
+- 🆕 Enhanced cluster monitoring
+- 🆕 User/Group/Role access control
+- 🆕 Network and firewall management
+- 🆕 Advanced storage and backup features
 
 ## 🚀 Using from Docker Hub or GitHub Container Registry
 
@@ -51,8 +57,8 @@ Run the container (replace values with your actual credentials):
 docker run -d \
   --name proxmox-emcp \
   -e PROXMOX_HOST="192.168.1.100" \
-  -e PROXMOX_TOKEN_NAME="your-token-name" \
-  -e PROXMOX_TOKEN_VALUE="your-token-value" \
+  -e PROXMOX_TOKEN_ID="your-token-id" \
+  -e PROXMOX_TOKEN_SECRET="your-token-secret" \
   puregrain/proxmox-emcp:latest
 ```
 
@@ -70,16 +76,16 @@ Run the container (same as above, just change the image name):
 docker run -d \
   --name proxmox-emcp \
   -e PROXMOX_HOST="192.168.1.100" \
-  -e PROXMOX_TOKEN_NAME="your-token-name" \
-  -e PROXMOX_TOKEN_VALUE="your-token-value" \
+  -e PROXMOX_TOKEN_ID="your-token-id" \
+  -e PROXMOX_TOKEN_SECRET="your-token-secret" \
   ghcr.io/puregrain/proxmox-emcp:latest
 ```
 
 ### Required Environment Variables
 
 - `PROXMOX_HOST`: Your Proxmox server IP/hostname (e.g., 192.168.1.100)
-- `PROXMOX_TOKEN_NAME`: API token name from Proxmox
-- `PROXMOX_TOKEN_VALUE`: API token value from Proxmox
+- `PROXMOX_TOKEN_ID`: API token ID from Proxmox
+- `PROXMOX_TOKEN_SECRET`: API token secret from Proxmox
 
 You can also use a `.env` file and Docker Compose for easier management. See below for more details.
 
@@ -102,8 +108,8 @@ cp .env.example .env
 Required variables:
 
 - `PROXMOX_HOST` - Your Proxmox server IP/hostname (e.g., 192.168.1.100)
-- `PROXMOX_TOKEN_NAME` - API token name from Proxmox
-- `PROXMOX_TOKEN_VALUE` - API token value from Proxmox
+- `PROXMOX_TOKEN_ID` - API token ID from Proxmox
+- `PROXMOX_TOKEN_SECRET` - API token secret from Proxmox
 
 ### 3. Run with Docker Compose
 
@@ -137,8 +143,8 @@ To connect an AI agent (like Claude, Cline, or any MCP-compatible orchestrator) 
       "image": "puregrain/proxmox-emcp:latest",
       "env": {
         "PROXMOX_HOST": "192.168.1.100",
-        "PROXMOX_TOKEN_NAME": "your-token-name",
-        "PROXMOX_TOKEN_VALUE": "your-token-value",
+        "PROXMOX_TOKEN_ID": "your-token-id",
+        "PROXMOX_TOKEN_SECRET": "your-token-secret",
         "PROXMOX_USER": "root@pam",
         "PROXMOX_VERIFY_SSL": "false",
         "LOG_LEVEL": "INFO"
@@ -180,16 +186,49 @@ See the included `settings.example.json` file for a ready-to-edit template.
 - `reboot_vm` - Reboot a virtual machine
 - `execute_vm_command` - Execute commands via QEMU guest agent
 
+### Container Operations (LXC)
+
+- `get_containers` - List all LXC containers across the cluster
+- `get_container_status` - Get container status and configuration
+- `start_container` - Start a container
+- `stop_container` - Stop a container gracefully
+- `reboot_container` - Reboot a container
+- `execute_container_command` - Execute commands in container
+- `create_container_snapshot` - Create a container snapshot
+- `list_container_snapshots` - List all snapshots for a container
+
 ### Snapshot Management
 
 - `create_vm_snapshot` - Create a VM snapshot
 - `list_vm_snapshots` - List all snapshots for a VM
 
-### Storage & Cluster
+### Storage & Backup
 
 - `get_storage` - List storage pools
-- `get_cluster_status` - Get cluster health information
+- `get_storage_details` - Get detailed storage pool information
+- `get_backups` - List backup files with filtering options
+
+### Cluster & Monitoring
+
+- `get_cluster_status` - Get comprehensive cluster health and resource summary
 - `get_task_status` - Check Proxmox task status
+- `get_recent_tasks` - List recent tasks across the cluster
+- `get_cluster_log` - Get cluster-wide log entries
+
+### User & Access Control
+
+- `get_users` - List all users in the cluster
+- `get_groups` - List all groups in the cluster
+- `get_roles` - List all roles and privileges
+
+### Network & Security
+
+- `get_vm_network` - Get network configuration for VMs/containers
+- `get_firewall_status` - Get firewall status and rules
+
+### Templates
+
+- `list_templates` - List all VM and container templates
 
 ## Alternative Deployment Methods
 
@@ -199,8 +238,8 @@ See the included `settings.example.json` file for a ready-to-edit template.
 docker build -t proxmox-mcp .
 docker run -it \
   -e PROXMOX_HOST=192.168.1.100 \
-  -e PROXMOX_TOKEN_NAME=your-token \
-  -e PROXMOX_TOKEN_VALUE=your-token-value \
+  -e PROXMOX_TOKEN_ID=your-token \
+  -e PROXMOX_TOKEN_SECRET=your-token-secret \
   proxmox-mcp
 ```
 
@@ -209,8 +248,8 @@ docker run -it \
 ```bash
 pip install -r requirements.txt
 export PROXMOX_HOST=192.168.1.100
-export PROXMOX_TOKEN_NAME=your-token
-export PROXMOX_TOKEN_VALUE=your-token-value
+export PROXMOX_TOKEN_ID=your-token
+export PROXMOX_TOKEN_SECRET=your-token-secret
 
 # For MCP clients (Claude Desktop, MCPO, etc.) - uses stdio transport
 python mcp_server_stdio.py
@@ -224,8 +263,8 @@ python mcp_server_stdio.py
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `PROXMOX_HOST` | Yes | - | Proxmox server IP/hostname |
-| `PROXMOX_TOKEN_NAME` | Yes | - | API token name |
-| `PROXMOX_TOKEN_VALUE` | Yes | - | API token value |
+| `PROXMOX_TOKEN_ID` | Yes | - | API token ID |
+| `PROXMOX_TOKEN_SECRET` | Yes | - | API token secret |
 | `PROXMOX_USER` | No | root@pam | Proxmox user |
 | `PROXMOX_VERIFY_SSL` | No | false | Verify SSL certificates |
 | `LOG_LEVEL` | No | INFO | Logging level |

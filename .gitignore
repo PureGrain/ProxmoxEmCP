@@ -54,8 +54,15 @@ node_modules/
 # Internal publishing docs
 PUBLISHING.internal.md
 
-# hide the archive
-/archive
+# hide the archive and discussions
+archive/
+ 
+discussions/
 
 # Ignore the Proxmox API overview document
 proxmox_api_overview.md
+proxmox_weaver_v2-0-2.py
+
+
+
+# End of .gitignore file
