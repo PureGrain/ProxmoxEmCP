@@ -1015,7 +1015,7 @@ class ProxmoxManager {
           "LOG_LEVEL - Log level (DEBUG/INFO), defaults to INFO"
         ]
       },
-      version: "0.4.2",
+      version: "0.4.1",
       author: "PureGrain at SLA Ops, LLC",
       license: "MIT"
     };
