@@ -169,6 +169,10 @@ The ProxmoxEmCP server now exposes 35+ tools across multiple categories:
 
 ## Changelog
 
+### v0.4.1 (2025-10-19)
+- Version bump to resolve npm publish conflict
+- No functional changes from v0.4.0
+
 ### v0.4.0 (2025-10-19) - MAJOR UPDATE
 
 **🚀 35+ New Features Added!**

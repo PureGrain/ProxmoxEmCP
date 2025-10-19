@@ -2,6 +2,12 @@
 
 All notable changes to @puregrain/proxmox-emcp-node will be documented in this file.
 
+## [0.4.1] - 2025-10-19
+
+### Fixed
+- Version bump to resolve npm publish conflict (0.4.0 was already published)
+- No functional changes from 0.4.0
+
 ## [0.4.0] - 2025-10-19
 
 ### 🎉 Major Update - 35+ New Features!
