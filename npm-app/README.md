@@ -1,5 +1,28 @@
 # @puregrain/proxmox-emcp-node
 
+> ## 🚨⚠️ **BREAKING CHANGE IN v0.4.0** ⚠️🚨
+>
+> ### 🔴 **CRITICAL: Environment Variables Have Changed!** 🔴
+>
+> | ❌ **OLD (v0.3.x)** | ✅ **NEW (v0.4.0+)** |
+> |-------------------|-------------------|
+> | `PROXMOX_TOKEN_NAME` | `PROXMOX_TOKEN_ID` |
+> | `PROXMOX_TOKEN_VALUE` | `PROXMOX_TOKEN_SECRET` |
+>
+> **⚡ You MUST update your environment variables or the connection will fail! ⚡**
+>
+> ```bash
+> # ❌ OLD (WILL NOT WORK)
+> export PROXMOX_TOKEN_NAME="mytoken"
+> export PROXMOX_TOKEN_VALUE="secret"
+>
+> # ✅ NEW (REQUIRED)
+> export PROXMOX_TOKEN_ID="mytoken"
+> export PROXMOX_TOKEN_SECRET="secret"
+> ```
+>
+> ---
+
 A native Node.js implementation of the ProxmoxEmCP server using the Model Context Protocol (MCP). This package provides a comprehensive API for managing and monitoring Proxmox virtual machines, nodes, and clusters.
 
 ## Installation
@@ -64,23 +87,21 @@ const vms = await proxmox.getVMs();
 | Variable | Required | Description | Example |
 |----------|----------|-------------|---------|
 | `PROXMOX_HOST` | Yes | Proxmox server address | `192.168.1.100` |
-| `PROXMOX_TOKEN_NAME` | Yes | API token name | `mytoken` |
-| `PROXMOX_TOKEN_VALUE` | Yes | API token value | `secret-token` |
+| `PROXMOX_TOKEN_ID` | Yes | API token ID | `mytoken` |
+| `PROXMOX_TOKEN_SECRET` | Yes | API token secret | `secret-token` |
 | `PROXMOX_USER` | No | User (defaults to root@pam) | `root@pam` |
 | `PROXMOX_VERIFY_SSL` | No | Verify SSL certificates | `false` |
 | `LOG_LEVEL` | No | Logging level | `DEBUG` |
 
 ## Available Tools
 
-The ProxmoxEmCP server exposes the following tools:
+The ProxmoxEmCP server now exposes 35+ tools across multiple categories:
 
 ### Node Operations
-
 - `get_nodes` - List all nodes in the cluster
 - `get_node_status` - Get detailed status for a specific node
 
 ### VM Operations
-
 - `get_vms` - List all VMs across the cluster
 - `get_vm_status` - Get status and configuration for a specific VM
 - `start_vm` - Start a virtual machine
@@ -90,11 +111,38 @@ The ProxmoxEmCP server exposes the following tools:
 - `create_vm_snapshot` - Create a VM snapshot
 - `list_vm_snapshots` - List all snapshots for a VM
 
-### Storage & Cluster
+### Container Operations (NEW)
+- `get_containers` - List all LXC containers
+- `get_container_status` - Get container status and configuration
+- `start_container` - Start an LXC container
+- `stop_container` - Stop a container gracefully
+- `reboot_container` - Reboot a container
+- `execute_container_command` - Execute commands in a container
+- `create_container_snapshot` - Create container snapshot
+- `list_container_snapshots` - List container snapshots
 
+### Storage & Backup (ENHANCED)
 - `get_storage` - List storage pools in the cluster
-- `get_cluster_status` - Get cluster status and health information
+- `get_storage_details` - Detailed storage information with NFS support
+- `get_backups` - List and filter backup files
+- `get_cluster_status` - **Enhanced** with resource totals and VM/container counts
 - `get_task_status` - Get status of a Proxmox task
+
+### User & Access Control (NEW)
+- `get_users` - List all users with groups and tokens
+- `get_groups` - List all groups with members
+- `get_roles` - List all available roles
+
+### Network & Security (NEW)
+- `get_vm_network` - Get network configuration for VMs/containers
+- `get_firewall_status` - Get firewall rules and status
+
+### Monitoring (NEW)
+- `get_recent_tasks` - List recent tasks with filtering
+- `get_cluster_log` - Get cluster-wide log entries
+
+### Templates (NEW)
+- `list_templates` - List VM and container templates
 
 ## Creating a Proxmox API Token
 
@@ -112,6 +160,19 @@ The ProxmoxEmCP server exposes the following tools:
 - Valid API token with appropriate permissions
 
 ## Changelog
+
+### v0.4.0 (2025-10-19) - MAJOR UPDATE
+
+**🚀 35+ New Features Added!**
+
+- **Container Management**: Full LXC container support (8 operations)
+- **Enhanced Cluster Status**: Resource totals, VM/container counts, quorum status
+- **Storage Management**: Detailed storage info, NFS support, backup listings
+- **User Access Control**: Users, groups, and roles management
+- **Network & Security**: Network configuration and firewall rules
+- **Advanced Monitoring**: Task history and cluster logs
+- **Template Management**: List VM/container templates
+- **Environment Variables**: Changed to `PROXMOX_TOKEN_ID` and `PROXMOX_TOKEN_SECRET`
 
 ### v0.3.7 (2025-10-17)
 

@@ -2,6 +2,55 @@
 
 All notable changes to @puregrain/proxmox-emcp-node will be documented in this file.
 
+## [0.4.0] - 2025-10-19
+
+### 🎉 Major Update - 35+ New Features!
+
+#### Added
+- **Container Management (8 operations)**
+  - `get_containers` - List all LXC containers
+  - `get_container_status` - Container status & config
+  - `start_container`, `stop_container`, `reboot_container`
+  - `execute_container_command` - Execute commands
+  - `create_container_snapshot`, `list_container_snapshots`
+
+- **Enhanced Cluster Status**
+  - Comprehensive resource totals (CPU/RAM/Storage)
+  - VM and container counts (running/stopped)
+  - Node health aggregation
+  - Quorum status
+
+- **Storage & Backup Management**
+  - `get_storage_details` - Detailed storage info with NFS support
+  - `get_backups` - List and filter backup files
+  - Storage usage per node
+
+- **User & Access Control**
+  - `get_users` - List users with groups and tokens
+  - `get_groups` - List groups with members
+  - `get_roles` - List all available roles
+
+- **Network & Security**
+  - `get_vm_network` - Network configuration for VMs/containers
+  - `get_firewall_status` - Firewall rules and status
+
+- **Advanced Monitoring**
+  - `get_recent_tasks` - Task history with filtering
+  - `get_cluster_log` - Cluster-wide log entries
+
+- **Template Management**
+  - `list_templates` - List VM/container templates
+
+#### Changed
+- **BREAKING**: Environment variables renamed:
+  - `PROXMOX_TOKEN_NAME` → `PROXMOX_TOKEN_ID`
+  - `PROXMOX_TOKEN_VALUE` → `PROXMOX_TOKEN_SECRET`
+
+#### Technical Details
+- Ported 35+ functions from Python container implementation
+- All functions return raw JSON for optimal AI/LLM consumption
+- Maintained backward compatibility with existing VM operations
+
 ## [0.3.7] - 2025-10-17
 
 ### Fixed
