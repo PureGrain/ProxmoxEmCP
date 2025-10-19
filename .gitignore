@@ -56,7 +56,7 @@ PUBLISHING.internal.md
 
 # hide the archive and discussions
 archive/
- 
+
 discussions/
 
 # Ignore the Proxmox API overview document

@@ -140,9 +140,15 @@ class ProxmoxManager:
                             container["node"] = node_name
                             all_containers.append(container)
                 except Exception as e:
-                    logger.warning(f"Could not get containers from node {node_name}: {e}")
+                    logger.warning(
+                        f"Could not get containers from node {node_name}: {e}"
+                    )
 
-            return {"containers": all_containers, "total": len(all_containers), "nodes_checked": len(nodes)}
+            return {
+                "containers": all_containers,
+                "total": len(all_containers),
+                "nodes_checked": len(nodes),
+            }
         except Exception as e:
             logger.error(f"Failed to get containers: {e}")
             return {"error": str(e)}
@@ -239,7 +245,7 @@ class ProxmoxManager:
         except Exception as e:
             logger.error(f"Failed to get VM status: {e}")
             return {"error": str(e)}
-    
+
     def get_container_status(self, node: str, vmid: int) -> Dict[str, Any]:
         """Get container status and configuration."""
         try:
@@ -248,7 +254,7 @@ class ProxmoxManager:
         except Exception as e:
             logger.error(f"Failed to get container status: {e}")
             return {"error": str(e)}
-    
+
     def start_container(self, node: str, vmid: int) -> Dict[str, Any]:
         """Start a container."""
         try:
@@ -261,7 +267,7 @@ class ProxmoxManager:
         except Exception as e:
             logger.error(f"Failed to start container {vmid}: {e}")
             return {"error": str(e)}
-    
+
     def stop_container(self, node: str, vmid: int) -> Dict[str, Any]:
         """Stop a container."""
         try:
@@ -274,7 +280,7 @@ class ProxmoxManager:
         except Exception as e:
             logger.error(f"Failed to stop container {vmid}: {e}")
             return {"error": str(e)}
-    
+
     def reboot_container(self, node: str, vmid: int) -> Dict[str, Any]:
         """Reboot a container."""
         try:
@@ -287,8 +293,10 @@ class ProxmoxManager:
         except Exception as e:
             logger.error(f"Failed to reboot container {vmid}: {e}")
             return {"error": str(e)}
-    
-    def execute_container_command(self, node: str, vmid: int, command: str) -> Dict[str, Any]:
+
+    def execute_container_command(
+        self, node: str, vmid: int, command: str
+    ) -> Dict[str, Any]:
         """Execute a command in a container via pct exec."""
         try:
             result = self.proxmox.nodes(node).lxc(vmid).exec.post(command=command)
@@ -302,7 +310,7 @@ class ProxmoxManager:
         except Exception as e:
             logger.error(f"Failed to execute command in container: {e}")
             return {"error": str(e)}
-    
+
     def create_container_snapshot(
         self, node: str, vmid: int, name: str, description: Optional[str] = None
     ) -> Dict[str, Any]:
@@ -311,7 +319,7 @@ class ProxmoxManager:
             params = {"snapname": name}
             if description is not None:
                 params["description"] = description
-            
+
             result = self.proxmox.nodes(node).lxc(vmid).snapshot.post(**params)
             return {
                 "success": True,
@@ -321,7 +329,7 @@ class ProxmoxManager:
         except Exception as e:
             logger.error(f"Failed to create container snapshot: {e}")
             return {"error": str(e)}
-    
+
     def list_container_snapshots(self, node: str, vmid: int) -> Dict[str, Any]:
         """List container snapshots."""
         try:
@@ -340,7 +348,7 @@ class ProxmoxManager:
         except Exception as e:
             logger.error(f"Failed to get storage: {e}")
             return {"error": str(e)}
-    
+
     def get_storage_details(self, storage: str) -> Dict[str, Any]:
         """Get detailed information about a specific storage pool."""
         try:
@@ -349,110 +357,120 @@ class ProxmoxManager:
             if not config_list:
                 return {"error": f"Storage {storage} not found"}
             config = config_list[0]
-            
+
             details = {
                 "storage": storage,
-                "type": config.get('type', 'unknown'),
-                "enabled": config.get('enabled', 0),
-                "shared": config.get('shared', 0),
-                "content": config.get('content', '').split(',') if config.get('content') else [],
-                "nodes": config.get('nodes', 'all')
+                "type": config.get("type", "unknown"),
+                "enabled": config.get("enabled", 0),
+                "shared": config.get("shared", 0),
+                "content": (
+                    config.get("content", "").split(",")
+                    if config.get("content")
+                    else []
+                ),
+                "nodes": config.get("nodes", "all"),
             }
-            
+
             # Add type-specific details
-            storage_type = config.get('type', '').lower()
-            
-            if storage_type == 'nfs':
-                details['nfs'] = {
-                    "server": config.get('server', 'N/A'),
-                    "export": config.get('export', 'N/A'),
-                    "path": config.get('path', 'N/A'),
-                    "options": config.get('options', 'N/A')
+            storage_type = config.get("type", "").lower()
+
+            if storage_type == "nfs":
+                details["nfs"] = {
+                    "server": config.get("server", "N/A"),
+                    "export": config.get("export", "N/A"),
+                    "path": config.get("path", "N/A"),
+                    "options": config.get("options", "N/A"),
                 }
-            elif storage_type in ['dir', 'lvm', 'lvmthin', 'zfs', 'zfspool']:
-                details['path'] = config.get('path', 'N/A')
-            
+            elif storage_type in ["dir", "lvm", "lvmthin", "zfs", "zfspool"]:
+                details["path"] = config.get("path", "N/A")
+
             # Try to get current usage from a node
             try:
                 nodes = self.proxmox.nodes.get()
                 if nodes and len(nodes) > 0:
-                    node = nodes[0]['node']
+                    node = nodes[0]["node"]
                     status = self.proxmox.nodes(node).storage(storage).status.get()
                     if status:
-                        details['status'] = {
-                            "total": status.get('total', 0),
-                            "used": status.get('used', 0),
-                            "available": status.get('avail', 0),
-                            "active": status.get('active', 0)
+                        details["status"] = {
+                            "total": status.get("total", 0),
+                            "used": status.get("used", 0),
+                            "available": status.get("avail", 0),
+                            "active": status.get("active", 0),
                         }
             except:
                 pass
-            
+
             return details
-            
+
         except Exception as e:
             logger.error(f"Failed to get storage details: {e}")
             return {"error": str(e)}
-    
-    def get_backups(self, storage: Optional[str] = None, node: Optional[str] = None) -> Dict[str, Any]:
+
+    def get_backups(
+        self, storage: Optional[str] = None, node: Optional[str] = None
+    ) -> Dict[str, Any]:
         """List all backups, optionally filtered by storage or node."""
         try:
             backups = []
-            
+
             if storage and node:
                 # Get backups from specific storage on specific node
                 content = self.proxmox.nodes(node).storage(storage).content.get()
                 if content is None:
                     content = []
                 for item in content:
-                    if item.get('content') == 'backup':
+                    if item.get("content") == "backup":
                         backup_info = {
-                            "volid": item['volid'],
-                            "vmid": item.get('vmid'),
+                            "volid": item["volid"],
+                            "vmid": item.get("vmid"),
                             "node": node,
                             "storage": storage,
-                            "size": item.get('size', 0),
-                            "format": item.get('format'),
-                            "ctime": item.get('ctime', 0),
-                            "notes": item.get('notes', '')
+                            "size": item.get("size", 0),
+                            "format": item.get("format"),
+                            "ctime": item.get("ctime", 0),
+                            "notes": item.get("notes", ""),
                         }
                         backups.append(backup_info)
             else:
                 # Get all backups from all storages on all nodes
                 nodes = self.proxmox.nodes.get()
                 storages = self.proxmox.storage.get()
-                
+
                 if nodes is None:
                     nodes = []
                 if storages is None:
                     storages = []
-                    
+
                 for node_info in nodes:
-                    node_name = node_info['node']
+                    node_name = node_info["node"]
                     for stor in storages:
-                        if 'backup' in stor.get('content', ''):
+                        if "backup" in stor.get("content", ""):
                             try:
-                                content = self.proxmox.nodes(node_name).storage(stor['storage']).content.get()
+                                content = (
+                                    self.proxmox.nodes(node_name)
+                                    .storage(stor["storage"])
+                                    .content.get()
+                                )
                                 if content is None:
                                     content = []
                                 for item in content:
-                                    if item.get('content') == 'backup':
+                                    if item.get("content") == "backup":
                                         backup_info = {
-                                            "volid": item['volid'],
-                                            "vmid": item.get('vmid'),
+                                            "volid": item["volid"],
+                                            "vmid": item.get("vmid"),
                                             "node": node_name,
-                                            "storage": stor['storage'],
-                                            "size": item.get('size', 0),
-                                            "format": item.get('format'),
-                                            "ctime": item.get('ctime', 0),
-                                            "notes": item.get('notes', '')
+                                            "storage": stor["storage"],
+                                            "size": item.get("size", 0),
+                                            "format": item.get("format"),
+                                            "ctime": item.get("ctime", 0),
+                                            "notes": item.get("notes", ""),
                                         }
                                         backups.append(backup_info)
                             except:
                                 continue
-            
+
             return {"backups": backups, "count": len(backups)}
-            
+
         except Exception as e:
             logger.error(f"Failed to list backups: {e}")
             return {"error": str(e)}
@@ -463,12 +481,12 @@ class ProxmoxManager:
         try:
             # Get cluster status
             cluster_status = self.proxmox.cluster.status.get()
-            
+
             # Get resource summary
-            resources = self.proxmox.cluster.resources.get(type='node')
+            resources = self.proxmox.cluster.resources.get(type="node")
             if resources is None:
                 resources = []
-            
+
             # Calculate totals
             total_cpu = 0
             total_memory = 0
@@ -476,77 +494,91 @@ class ProxmoxManager:
             total_disk = 0
             total_disk_used = 0
             online_nodes = 0
-            
+
             nodes_info = []
             for node in resources:
-                if node['type'] == 'node':
-                    total_cpu += node.get('maxcpu', 0)
-                    total_memory += node.get('maxmem', 0)
-                    total_memory_used += node.get('mem', 0)
-                    total_disk += node.get('maxdisk', 0)
-                    total_disk_used += node.get('disk', 0)
-                    
-                    if node.get('status') == 'online':
+                if node["type"] == "node":
+                    total_cpu += node.get("maxcpu", 0)
+                    total_memory += node.get("maxmem", 0)
+                    total_memory_used += node.get("mem", 0)
+                    total_disk += node.get("maxdisk", 0)
+                    total_disk_used += node.get("disk", 0)
+
+                    if node.get("status") == "online":
                         online_nodes += 1
-                    
-                    nodes_info.append({
-                        "name": node['node'],
-                        "status": node.get('status', 'unknown'),
-                        "cpu_usage": node.get('cpu', 0),
-                        "memory": node.get('mem', 0),
-                        "max_memory": node.get('maxmem', 0),
-                        "disk": node.get('disk', 0),
-                        "max_disk": node.get('maxdisk', 0),
-                        "uptime": node.get('uptime', 0)
-                    })
-            
+
+                    nodes_info.append(
+                        {
+                            "name": node["node"],
+                            "status": node.get("status", "unknown"),
+                            "cpu_usage": node.get("cpu", 0),
+                            "memory": node.get("mem", 0),
+                            "max_memory": node.get("maxmem", 0),
+                            "disk": node.get("disk", 0),
+                            "max_disk": node.get("maxdisk", 0),
+                            "uptime": node.get("uptime", 0),
+                        }
+                    )
+
             # Get VM and container counts
-            vms = self.proxmox.cluster.resources.get(type='vm')
+            vms = self.proxmox.cluster.resources.get(type="vm")
             if vms is None:
                 vms = []
-            vm_count = sum(1 for vm in vms if vm['type'] == 'qemu')
-            ct_count = sum(1 for vm in vms if vm['type'] == 'lxc')
-            running_vms = sum(1 for vm in vms if vm['type'] == 'qemu' and vm.get('status') == 'running')
-            running_cts = sum(1 for vm in vms if vm['type'] == 'lxc' and vm.get('status') == 'running')
-            
+            vm_count = sum(1 for vm in vms if vm["type"] == "qemu")
+            ct_count = sum(1 for vm in vms if vm["type"] == "lxc")
+            running_vms = sum(
+                1
+                for vm in vms
+                if vm["type"] == "qemu" and vm.get("status") == "running"
+            )
+            running_cts = sum(
+                1 for vm in vms if vm["type"] == "lxc" and vm.get("status") == "running"
+            )
+
             cluster_info = {
-                "name": cluster_status[0].get('name', 'Proxmox Cluster') if cluster_status else 'Proxmox Cluster',
-                "version": cluster_status[0].get('version') if cluster_status else 'unknown',
+                "name": (
+                    cluster_status[0].get("name", "Proxmox Cluster")
+                    if cluster_status
+                    else "Proxmox Cluster"
+                ),
+                "version": (
+                    cluster_status[0].get("version") if cluster_status else "unknown"
+                ),
                 "nodes": {
                     "total": len(nodes_info),
                     "online": online_nodes,
-                    "details": nodes_info
+                    "details": nodes_info,
                 },
                 "resources": {
-                    "cpu": {
-                        "total_cores": total_cpu
-                    },
+                    "cpu": {"total_cores": total_cpu},
                     "memory": {
                         "total": total_memory,
                         "used": total_memory_used,
-                        "free": total_memory - total_memory_used
+                        "free": total_memory - total_memory_used,
                     },
                     "storage": {
                         "total": total_disk,
                         "used": total_disk_used,
-                        "free": total_disk - total_disk_used
-                    }
+                        "free": total_disk - total_disk_used,
+                    },
                 },
                 "virtual_machines": {
                     "total": vm_count,
                     "running": running_vms,
-                    "stopped": vm_count - running_vms
+                    "stopped": vm_count - running_vms,
                 },
                 "containers": {
                     "total": ct_count,
                     "running": running_cts,
-                    "stopped": ct_count - running_cts
+                    "stopped": ct_count - running_cts,
                 },
-                "quorate": cluster_status[0].get('quorate', True) if cluster_status else True
+                "quorate": (
+                    cluster_status[0].get("quorate", True) if cluster_status else True
+                ),
             }
-            
+
             return cluster_info
-            
+
         except Exception as e:
             logger.error(f"Failed to get cluster status: {e}")
             return {"error": str(e)}
@@ -565,7 +597,7 @@ class ProxmoxManager:
         except Exception as e:
             logger.error(f"Failed to get task status: {e}")
             return {"error": str(e)}
-    
+
     # User & Access Control operations
     def get_users(self) -> Dict[str, Any]:
         """List all users in the Proxmox cluster."""
@@ -573,75 +605,83 @@ class ProxmoxManager:
             users = self.proxmox.access.users.get()
             if users is None:
                 users = []
-            
+
             user_list = []
             for user in users:
                 user_info = {
-                    "userid": user['userid'],
-                    "enable": user.get('enable', 1),
-                    "expire": user.get('expire', 0),
-                    "firstname": user.get('firstname', ''),
-                    "lastname": user.get('lastname', ''),
-                    "email": user.get('email', ''),
-                    "comment": user.get('comment', ''),
-                    "groups": user.get('groups', '').split(',') if user.get('groups') else [],
-                    "tokens": user.get('tokens', [])
+                    "userid": user["userid"],
+                    "enable": user.get("enable", 1),
+                    "expire": user.get("expire", 0),
+                    "firstname": user.get("firstname", ""),
+                    "lastname": user.get("lastname", ""),
+                    "email": user.get("email", ""),
+                    "comment": user.get("comment", ""),
+                    "groups": (
+                        user.get("groups", "").split(",") if user.get("groups") else []
+                    ),
+                    "tokens": user.get("tokens", []),
                 }
                 user_list.append(user_info)
-            
+
             return {"users": user_list, "count": len(user_list)}
         except Exception as e:
             logger.error(f"Failed to list users: {e}")
             return {"error": str(e)}
-    
+
     def get_groups(self) -> Dict[str, Any]:
         """List all groups in the Proxmox cluster."""
         try:
             groups = self.proxmox.access.groups.get()
             if groups is None:
                 groups = []
-            
+
             group_list = []
             for group in groups:
                 group_info = {
-                    "groupid": group['groupid'],
-                    "comment": group.get('comment', ''),
-                    "users": group.get('users', '').split(',') if group.get('users') else []
+                    "groupid": group["groupid"],
+                    "comment": group.get("comment", ""),
+                    "users": (
+                        group.get("users", "").split(",") if group.get("users") else []
+                    ),
                 }
                 group_list.append(group_info)
-            
+
             return {"groups": group_list, "count": len(group_list)}
         except Exception as e:
             logger.error(f"Failed to list groups: {e}")
             return {"error": str(e)}
-    
+
     def get_roles(self) -> Dict[str, Any]:
         """List all roles in the Proxmox cluster."""
         try:
             roles = self.proxmox.access.roles.get()
             if roles is None:
                 roles = []
-            
+
             role_list = []
             for role in roles:
                 role_info = {
-                    "roleid": role['roleid'],
-                    "privs": role.get('privs', '').split(',') if role.get('privs') else [],
-                    "special": role.get('special', 0)
+                    "roleid": role["roleid"],
+                    "privs": (
+                        role.get("privs", "").split(",") if role.get("privs") else []
+                    ),
+                    "special": role.get("special", 0),
                 }
                 role_list.append(role_info)
-            
+
             return {"roles": role_list, "count": len(role_list)}
         except Exception as e:
             logger.error(f"Failed to list roles: {e}")
             return {"error": str(e)}
-    
+
     # Monitoring operations
-    def get_recent_tasks(self, node: Optional[str] = None, limit: int = 20) -> Dict[str, Any]:
+    def get_recent_tasks(
+        self, node: Optional[str] = None, limit: int = 20
+    ) -> Dict[str, Any]:
         """List recent tasks, optionally filtered by node."""
         try:
             tasks = []
-            
+
             if node:
                 # Get tasks from specific node
                 node_tasks = self.proxmox.nodes(node).tasks.get(limit=limit)
@@ -649,15 +689,15 @@ class ProxmoxManager:
                     node_tasks = []
                 for task in node_tasks:
                     task_info = {
-                        "upid": task.get('upid'),
-                        "node": task.get('node'),
-                        "pid": task.get('pid'),
-                        "pstart": task.get('pstart'),
-                        "type": task.get('type'),
-                        "status": task.get('status', 'running'),
-                        "user": task.get('user'),
-                        "starttime": task.get('starttime', 0),
-                        "endtime": task.get('endtime', 0)
+                        "upid": task.get("upid"),
+                        "node": task.get("node"),
+                        "pid": task.get("pid"),
+                        "pstart": task.get("pstart"),
+                        "type": task.get("type"),
+                        "status": task.get("status", "running"),
+                        "user": task.get("user"),
+                        "starttime": task.get("starttime", 0),
+                        "endtime": task.get("endtime", 0),
                     }
                     tasks.append(task_info)
             else:
@@ -668,33 +708,35 @@ class ProxmoxManager:
                 for node_info in nodes:
                     try:
                         node_limit = limit // len(nodes) if len(nodes) > 0 else limit
-                        node_tasks = self.proxmox.nodes(node_info['node']).tasks.get(limit=node_limit)
+                        node_tasks = self.proxmox.nodes(node_info["node"]).tasks.get(
+                            limit=node_limit
+                        )
                         if node_tasks is None:
                             node_tasks = []
                         for task in node_tasks:
                             task_info = {
-                                "upid": task.get('upid'),
-                                "node": task.get('node'),
-                                "pid": task.get('pid'),
-                                "type": task.get('type'),
-                                "status": task.get('status', 'running'),
-                                "user": task.get('user'),
-                                "starttime": task.get('starttime', 0),
-                                "endtime": task.get('endtime', 0)
+                                "upid": task.get("upid"),
+                                "node": task.get("node"),
+                                "pid": task.get("pid"),
+                                "type": task.get("type"),
+                                "status": task.get("status", "running"),
+                                "user": task.get("user"),
+                                "starttime": task.get("starttime", 0),
+                                "endtime": task.get("endtime", 0),
                             }
                             tasks.append(task_info)
                     except:
                         continue
-            
+
             # Sort by start time (most recent first)
-            tasks.sort(key=lambda x: x['starttime'], reverse=True)
-            
+            tasks.sort(key=lambda x: x["starttime"], reverse=True)
+
             return {"tasks": tasks[:limit], "count": len(tasks[:limit])}
-            
+
         except Exception as e:
             logger.error(f"Failed to list tasks: {e}")
             return {"error": str(e)}
-    
+
     def get_cluster_log(self, max_lines: int = 50) -> Dict[str, Any]:
         """Get recent cluster log entries."""
         try:
@@ -702,25 +744,25 @@ class ProxmoxManager:
             log_entries = self.proxmox.cluster.log.get(max=max_lines)
             if log_entries is None:
                 log_entries = []
-            
+
             formatted_logs = []
             for entry in log_entries:
                 log_info = {
-                    "time": entry.get('time', 0),
-                    "node": entry.get('node', 'cluster'),
-                    "user": entry.get('user', 'system'),
-                    "message": entry.get('msg', ''),
-                    "priority": entry.get('pri', 6),
-                    "tag": entry.get('tag', 'system')
+                    "time": entry.get("time", 0),
+                    "node": entry.get("node", "cluster"),
+                    "user": entry.get("user", "system"),
+                    "message": entry.get("msg", ""),
+                    "priority": entry.get("pri", 6),
+                    "tag": entry.get("tag", "system"),
                 }
                 formatted_logs.append(log_info)
-            
+
             return {"logs": formatted_logs, "count": len(formatted_logs)}
-            
+
         except Exception as e:
             logger.error(f"Failed to get cluster log: {e}")
             return {"error": str(e)}
-    
+
     # Template management
     def list_templates(self) -> Dict[str, Any]:
         """List all available templates (VMs and containers marked as templates)."""
@@ -729,104 +771,109 @@ class ProxmoxManager:
             nodes = self.proxmox.nodes.get()
             if nodes is None:
                 nodes = []
-            
+
             for node in nodes:
-                node_name = node['node']
-                
+                node_name = node["node"]
+
                 # Check VMs for templates
                 vms = self.proxmox.nodes(node_name).qemu.get()
                 if vms:
                     for vm in vms:
-                        if vm.get('template', 0) == 1:
+                        if vm.get("template", 0) == 1:
                             template_info = {
-                                "vmid": vm['vmid'],
-                                "name": vm.get('name', 'unnamed'),
+                                "vmid": vm["vmid"],
+                                "name": vm.get("name", "unnamed"),
                                 "node": node_name,
                                 "type": "qemu",
-                                "disk_size": vm.get('maxdisk', 0),
-                                "memory": vm.get('maxmem', 0),
-                                "cpus": vm.get('cpus', 1)
+                                "disk_size": vm.get("maxdisk", 0),
+                                "memory": vm.get("maxmem", 0),
+                                "cpus": vm.get("cpus", 1),
                             }
                             templates.append(template_info)
-                
+
                 # Check containers for templates
                 containers = self.proxmox.nodes(node_name).lxc.get()
                 if containers:
                     for ct in containers:
-                        if ct.get('template', 0) == 1:
+                        if ct.get("template", 0) == 1:
                             template_info = {
-                                "vmid": ct['vmid'],
-                                "name": ct.get('name', 'unnamed'),
+                                "vmid": ct["vmid"],
+                                "name": ct.get("name", "unnamed"),
                                 "node": node_name,
                                 "type": "lxc",
-                                "disk_size": ct.get('maxdisk', 0),
-                                "memory": ct.get('maxmem', 0),
-                                "cpus": ct.get('cpus', 1)
+                                "disk_size": ct.get("maxdisk", 0),
+                                "memory": ct.get("maxmem", 0),
+                                "cpus": ct.get("cpus", 1),
                             }
                             templates.append(template_info)
-            
+
             return {"templates": templates, "count": len(templates)}
-            
+
         except Exception as e:
             logger.error(f"Failed to list templates: {e}")
             return {"error": str(e)}
-    
+
     # Network & Firewall operations
-    def get_vm_network(self, node: str, vmid: int, vm_type: str = "qemu") -> Dict[str, Any]:
+    def get_vm_network(
+        self, node: str, vmid: int, vm_type: str = "qemu"
+    ) -> Dict[str, Any]:
         """Get network configuration for a VM or container."""
         try:
             if vm_type == "qemu":
                 config = self.proxmox.nodes(node).qemu(vmid).config.get()
             else:
                 config = self.proxmox.nodes(node).lxc(vmid).config.get()
-            
+
             if config is None:
                 config = {}
-                
+
             network_info = {
                 "vmid": vmid,
                 "node": node,
                 "type": vm_type,
-                "interfaces": []
+                "interfaces": [],
             }
-            
+
             # Extract network interfaces
             for key in config:
-                if key.startswith('net'):
+                if key.startswith("net"):
                     net_config = config[key]
-                    interface = {
-                        "name": key,
-                        "config": net_config
-                    }
-                    
+                    interface = {"name": key, "config": net_config}
+
                     # Parse network configuration string
                     if isinstance(net_config, str):
-                        parts = net_config.split(',')
+                        parts = net_config.split(",")
                         for part in parts:
-                            if '=' in part:
-                                k, v = part.split('=', 1)
+                            if "=" in part:
+                                k, v = part.split("=", 1)
                                 interface[k] = v
-                    
+
                     network_info["interfaces"].append(interface)
-            
+
             # Try to get IP addresses if agent is running (VMs only)
             if vm_type == "qemu":
                 try:
-                    agent_info = self.proxmox.nodes(node).qemu(vmid).agent.get('network-get-interfaces')
+                    agent_info = (
+                        self.proxmox.nodes(node)
+                        .qemu(vmid)
+                        .agent.get("network-get-interfaces")
+                    )
                     if agent_info:
-                        network_info["agent_network"] = agent_info.get('result', [])
+                        network_info["agent_network"] = agent_info.get("result", [])
                     else:
                         network_info["agent_network"] = None
                 except:
                     network_info["agent_network"] = None
-            
+
             return network_info
-            
+
         except Exception as e:
             logger.error(f"Failed to get network info: {e}")
             return {"error": str(e)}
-    
-    def get_firewall_status(self, node: str, vmid: Optional[int] = None) -> Dict[str, Any]:
+
+    def get_firewall_status(
+        self, node: str, vmid: Optional[int] = None
+    ) -> Dict[str, Any]:
         """Get firewall status and rules for a node or VM."""
         try:
             if vmid:
@@ -837,38 +884,38 @@ class ProxmoxManager:
                 # Get node firewall status
                 options = self.proxmox.nodes(node).firewall.options.get()
                 rules = self.proxmox.nodes(node).firewall.rules.get()
-            
+
             if options is None:
                 options = {}
             if rules is None:
                 rules = []
-                
+
             firewall_info = {
                 "target": f"VM {vmid}" if vmid else f"Node {node}",
-                "enabled": options.get('enable', 0),
-                "policy_in": options.get('policy_in', 'ACCEPT'),
-                "policy_out": options.get('policy_out', 'ACCEPT'),
-                "log_level": options.get('log_level_in', 'nolog'),
-                "rules": []
+                "enabled": options.get("enable", 0),
+                "policy_in": options.get("policy_in", "ACCEPT"),
+                "policy_out": options.get("policy_out", "ACCEPT"),
+                "log_level": options.get("log_level_in", "nolog"),
+                "rules": [],
             }
-            
+
             for rule in rules:
                 rule_info = {
-                    "pos": rule.get('pos'),
-                    "type": rule.get('type'),
-                    "action": rule.get('action'),
-                    "enable": rule.get('enable', 1),
-                    "source": rule.get('source', 'any'),
-                    "dest": rule.get('dest', 'any'),
-                    "proto": rule.get('proto', 'any'),
-                    "dport": rule.get('dport', ''),
-                    "sport": rule.get('sport', ''),
-                    "comment": rule.get('comment', '')
+                    "pos": rule.get("pos"),
+                    "type": rule.get("type"),
+                    "action": rule.get("action"),
+                    "enable": rule.get("enable", 1),
+                    "source": rule.get("source", "any"),
+                    "dest": rule.get("dest", "any"),
+                    "proto": rule.get("proto", "any"),
+                    "dport": rule.get("dport", ""),
+                    "sport": rule.get("sport", ""),
+                    "comment": rule.get("comment", ""),
                 }
                 firewall_info["rules"].append(rule_info)
-            
+
             return firewall_info
-            
+
         except Exception as e:
             logger.error(f"Failed to get firewall status: {e}")
             return {"error": str(e)}
@@ -949,7 +996,10 @@ async def run_mcp_server():
                             "type": "string",
                             "description": "Node name where container is located",
                         },
-                        "vmid": {"type": "integer", "description": "Container ID number"},
+                        "vmid": {
+                            "type": "integer",
+                            "description": "Container ID number",
+                        },
                     },
                     "required": ["node", "vmid"],
                 },
@@ -1009,7 +1059,10 @@ async def run_mcp_server():
                             "type": "string",
                             "description": "Node name where container is located",
                         },
-                        "vmid": {"type": "integer", "description": "Container ID number"},
+                        "vmid": {
+                            "type": "integer",
+                            "description": "Container ID number",
+                        },
                     },
                     "required": ["node", "vmid"],
                 },
@@ -1024,7 +1077,10 @@ async def run_mcp_server():
                             "type": "string",
                             "description": "Node name where container is located",
                         },
-                        "vmid": {"type": "integer", "description": "Container ID number"},
+                        "vmid": {
+                            "type": "integer",
+                            "description": "Container ID number",
+                        },
                     },
                     "required": ["node", "vmid"],
                 },
@@ -1039,7 +1095,10 @@ async def run_mcp_server():
                             "type": "string",
                             "description": "Node name where container is located",
                         },
-                        "vmid": {"type": "integer", "description": "Container ID number"},
+                        "vmid": {
+                            "type": "integer",
+                            "description": "Container ID number",
+                        },
                     },
                     "required": ["node", "vmid"],
                 },
@@ -1108,7 +1167,10 @@ async def run_mcp_server():
                             "type": "string",
                             "description": "Node name where container is located",
                         },
-                        "vmid": {"type": "integer", "description": "Container ID number"},
+                        "vmid": {
+                            "type": "integer",
+                            "description": "Container ID number",
+                        },
                         "command": {
                             "type": "string",
                             "description": "Command to execute in the container",
@@ -1127,7 +1189,10 @@ async def run_mcp_server():
                             "type": "string",
                             "description": "Node name where container is located",
                         },
-                        "vmid": {"type": "integer", "description": "Container ID number"},
+                        "vmid": {
+                            "type": "integer",
+                            "description": "Container ID number",
+                        },
                         "name": {"type": "string", "description": "Snapshot name"},
                         "description": {
                             "type": "string",
@@ -1147,7 +1212,10 @@ async def run_mcp_server():
                             "type": "string",
                             "description": "Node name where container is located",
                         },
-                        "vmid": {"type": "integer", "description": "Container ID number"},
+                        "vmid": {
+                            "type": "integer",
+                            "description": "Container ID number",
+                        },
                     },
                     "required": ["node", "vmid"],
                 },
@@ -1184,7 +1252,7 @@ async def run_mcp_server():
                         "node": {
                             "type": "string",
                             "description": "Optional: specific node",
-                        }
+                        },
                     },
                     "required": [],
                 },
@@ -1237,7 +1305,10 @@ async def run_mcp_server():
                             "type": "string",
                             "description": "Node name where VM/container is located",
                         },
-                        "vmid": {"type": "integer", "description": "VM or container ID"},
+                        "vmid": {
+                            "type": "integer",
+                            "description": "VM or container ID",
+                        },
                         "vm_type": {
                             "type": "string",
                             "description": "Type: 'qemu' for VM, 'lxc' for container (default: qemu)",
@@ -1337,7 +1408,9 @@ async def run_mcp_server():
             elif name == "get_vm_status":
                 result = proxmox.get_vm_status(arguments["node"], arguments["vmid"])
             elif name == "get_container_status":
-                result = proxmox.get_container_status(arguments["node"], arguments["vmid"])
+                result = proxmox.get_container_status(
+                    arguments["node"], arguments["vmid"]
+                )
             elif name == "start_vm":
                 result = proxmox.start_vm(arguments["node"], arguments["vmid"])
             elif name == "stop_vm":
@@ -1375,15 +1448,16 @@ async def run_mcp_server():
             elif name == "list_vm_snapshots":
                 result = proxmox.list_vm_snapshots(arguments["node"], arguments["vmid"])
             elif name == "list_container_snapshots":
-                result = proxmox.list_container_snapshots(arguments["node"], arguments["vmid"])
+                result = proxmox.list_container_snapshots(
+                    arguments["node"], arguments["vmid"]
+                )
             elif name == "get_storage":
                 result = proxmox.get_storage()
             elif name == "get_storage_details":
                 result = proxmox.get_storage_details(arguments["storage"])
             elif name == "get_backups":
                 result = proxmox.get_backups(
-                    arguments.get("storage"),
-                    arguments.get("node")
+                    arguments.get("storage"), arguments.get("node")
                 )
             elif name == "get_cluster_status":
                 result = proxmox.get_cluster_status()
@@ -1399,22 +1473,18 @@ async def run_mcp_server():
                 result = proxmox.get_vm_network(
                     arguments["node"],
                     arguments["vmid"],
-                    arguments.get("vm_type", "qemu")
+                    arguments.get("vm_type", "qemu"),
                 )
             elif name == "get_firewall_status":
                 result = proxmox.get_firewall_status(
-                    arguments["node"],
-                    arguments.get("vmid")
+                    arguments["node"], arguments.get("vmid")
                 )
             elif name == "get_recent_tasks":
                 result = proxmox.get_recent_tasks(
-                    arguments.get("node"),
-                    arguments.get("limit", 20)
+                    arguments.get("node"), arguments.get("limit", 20)
                 )
             elif name == "get_cluster_log":
-                result = proxmox.get_cluster_log(
-                    arguments.get("max_lines", 50)
-                )
+                result = proxmox.get_cluster_log(arguments.get("max_lines", 50))
             elif name == "list_templates":
                 result = proxmox.list_templates()
             else:
