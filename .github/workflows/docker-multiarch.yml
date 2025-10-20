@@ -42,8 +42,7 @@ jobs:
           push: true
           tags: puregrain/proxmox-emcp:latest
           platforms: linux/amd64,linux/arm64
-          # Generate SBOM and provenance attestations
-          sbom: true
+          # Generate provenance attestations
           provenance: mode=max
 
       # Docker Scout Analysis
@@ -62,19 +61,6 @@ jobs:
           to: puregrain/proxmox-emcp:latest
           exit-code: false
           summary: true
-
-      - name: Install Syft
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
-
-      - name: Generate SBOM
-        run: syft packages docker:docker.io/puregrain/proxmox-emcp:latest -o json > sbom.json
-
-      - name: Upload SBOM
-        uses: actions/upload-artifact@v4
-        with:
-          name: sbom
-          path: sbom.json
 
   codeql:
     runs-on: ubuntu-latest
