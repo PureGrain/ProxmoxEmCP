@@ -17,19 +17,11 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Stage 2: Runtime
-FROM alpine:latest
+FROM gcr.io/distroless/python3
 WORKDIR /app
-
-# Install runtime dependencies
-RUN apk update && apk add --no-cache python3 py3-pip && \
-    ln -sf python3 /usr/bin/python
 
 # Copy built application from builder stage
 COPY --from=builder /app /app
-
-# Create non-root user for security
-RUN addgroup -S mcp && adduser -S -G mcp -h /home/mcp mcp && \
-    chown -R mcp:mcp /app
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
@@ -39,11 +31,8 @@ ENV LOG_LEVEL=INFO
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD python -c "import mcp; import proxmoxer; print('OK')" || exit 1
 
-# Switch to non-root user
-USER mcp
-
 # Run the MCP server
-CMD ["python", "mcp_server_stdio.py"]
+CMD ["python3", "mcp_server_stdio.py"]
 
 # Add OCI labels for attestation metadata
 LABEL org.opencontainers.image.title="Proxmox MCP Server"
