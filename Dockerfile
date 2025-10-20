@@ -42,8 +42,10 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
 # Ensure the working directory is owned by the non-root user
-WORKDIR /app
 RUN chown -R appuser:appgroup /app
+
+# Set permissions for the directory where SARIF files are generated
+RUN mkdir -p /home/appuser && chown -R appuser:appgroup /home/appuser
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
