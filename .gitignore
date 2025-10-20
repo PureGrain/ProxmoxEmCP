@@ -68,3 +68,20 @@ proxmox_weaver_v2-0-2.py
 npm-app/test-server.js
 npm-app/test-cli.js
 npm-app/update-version.js
+
+# Added exclusions for sensitive and unnecessary files
+# Temporary files
+*.tmp
+*.temp
+
+# Python virtual environments
+.venv/
+
+# Node.js lock files
+yarn.lock
+
+# Ignore npm debug logs
+npm-debug.log*
+
+# Ignore internal documentation
+npm-app/MIGRATION_PLAN.md

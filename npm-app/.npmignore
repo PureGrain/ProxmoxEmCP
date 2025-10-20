@@ -42,6 +42,7 @@ Thumbs.db
 
 # Temporary files
 *.tmp
+*.temp
 temp/
 tmp/
 
@@ -49,17 +50,24 @@ tmp/
 .env
 .env.*
 
-# Package artifacts
-*.tgz
+# Workspace-wide exclusions
+logs/
+packages/**/test*.js
+packages/**/tests/
+packages/**/MIGRATION_PLAN.md
+packages/**/check-version.js
+packages/**/test-cli.js
+packages/**/test-server.js
+
+# Added exclusions for sensitive and unnecessary files
+# Node.js lock files
+yarn.lock
+
+# Ignore npm debug logs
 npm-debug.log*
 
-# Exclude test-cli.js as it is a development utility
-# This ensures it is not included in the npm package
-test-cli.js
+# Ignore internal documentation
+MIGRATION_PLAN.md
 
-# Exclude additional test and utility scripts
-check-version.js
-update-version.js
-*.test.js
-*.spec.js
-npm-app/check-version.js
+# Python virtual environments
+.venv/
