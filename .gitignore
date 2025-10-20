@@ -96,7 +96,7 @@ npm-app/node_modules/
 .env.*
 
 # Workspace-wide exclusions
-tests/
+
 
 # Added exclusions for sensitive and unnecessary files
 # Node.js lock files
