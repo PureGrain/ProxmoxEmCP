@@ -8,7 +8,7 @@
 # Multi-stage build to optimize image size
 
 # Stage 1: Build
-FROM python:3.14-alpine as builder
+FROM python:3.14-alpine AS builder
 WORKDIR /app
 
 # Install build dependencies and Python packages
