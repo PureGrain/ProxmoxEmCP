@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Build outputs (no longer used, but in case of future TypeScript conversion)
+dist/
+*.tsbuildinfo
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# npm package files
+*.tgz
+npm-debug.log*
+
+# Environment files
+.env
+.env.local
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Temporary files
+*.tmp
+temp/
+tmp/

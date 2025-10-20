@@ -9,6 +9,7 @@
 .env
 *.env
 !.env.example
+.env.local
 
 # Python cache
 __pycache__/
@@ -42,41 +43,95 @@ desktop.ini
 .coverage
 .pytest_cache/
 htmlcov/
+coverage/
+.nyc_output/
 
 # Build artifacts
 build/
 dist/
 *.egg-info/
+*.tsbuildinfo
 
 # Node.js
 node_modules/
+*.tgz
+npm-debug.log*
 
-# Internal publishing docs
-PUBLISHING.internal.md
-
-# hide the archive and discussions
-archive/
-discussions/
-
-
-# Ignore the Proxmox API overview document
-proxmox_api_overview.md
-proxmox_weaver_v2-0-2.py
-
-# End of .gitignore file
-
-npm-app/test-server.js
-npm-app/test-cli.js
-npm-app/update-version.js
-
-# Added exclusions for sensitive and unnecessary files
 # Temporary files
 *.tmp
 *.temp
+temp/
+tmp/
 
-# Python virtual environments
-.venv/
+# Exclude additional test and utility scripts
+npm-app/check-version.js
+npm-app/update-version.js
+npm-app/*.test.js
+npm-app/*.spec.js
 
+npm-app/test-cli.js
+npm-app/test-server.js
+
+# Internal documentation
+MIGRATION_PLAN.md
+PUBLISHING.internal.md
+npm-app/MIGRATION_PLAN.md
+
+# Source files (if any exist in future)
+npm-app/src/
+*.ts
+!*.d.ts
+tsconfig.json
+
+# Development files
+npm-app/.npmignore
+
+# Test files
+npm-app/test/
+npm-app/tests/
+npm-app/*.test.js
+npm-app/*.spec.js
+
+# Build artifacts (no longer used)
+npm-app/dist/
+
+# Dependencies (shouldn't be in npm package)
+npm-app/node_modules/
+
+# IDE files
+npm-app/.vscode/
+npm-app/.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git files
+.git/
+.github/
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Environment files
+.env
+.env.*
+
+# Workspace-wide exclusions
+logs/
+packages/**/test*.js
+packages/**/tests/
+packages/**/MIGRATION_PLAN.md
+packages/**/check-version.js
+packages/**/test-cli.js
+packages/**/test-server.js
+
+# Added exclusions for sensitive and unnecessary files
 # Node.js lock files
 yarn.lock
 
@@ -84,7 +139,32 @@ yarn.lock
 npm-debug.log*
 
 # Ignore internal documentation
-npm-app/MIGRATION_PLAN.md
+MIGRATION_PLAN.md
+
+# Python virtual environments
+.venv/
 
 # Ignore dynamically generated SBOM file
 sbom.json
+
+# Ignore the Proxmox API overview document
+proxmox_api_overview.md
+proxmox_weaver_v2-0-2.py
+
+# Corrected invalid patterns
+archive/
+discussions/
+tests/
+
+# Additional exclusions from workspace audit
+build-context.tar
+docker-compose.yml.old
+anythingllm_mcp_servers.json
+mcpo_config.json
+venv-vault-navigator/
+persistent_configs/
+datasets/
+containers/
+
+
+# End of .gitignore file
