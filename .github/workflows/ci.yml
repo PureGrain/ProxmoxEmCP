@@ -43,7 +43,7 @@ jobs:
       - name: Push Docker image to Docker Hub
         run: docker push puregrain/proxmox-emcp:latest
 
-      - name: Install Cosign
+      - name: Install Latest Cosign
         run: |
           curl -Lo cosign https://github.com/sigstore/cosign/releases/latest/download/cosign-linux-amd64
           chmod +x cosign
@@ -51,7 +51,7 @@ jobs:
 
       - name: Sign Docker image with Cosign
         run: |
-          cosign sign --keyless puregrain/proxmox-emcp:latest
+          cosign sign puregrain/proxmox-emcp:latest
         env:
           COSIGN_EXPERIMENTAL: "true"
 
