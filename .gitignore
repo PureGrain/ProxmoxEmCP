@@ -132,4 +132,8 @@ packages/proxmox-emcp-node/
 npm-app/cli.cjs
 npm-app/package-lock.json
 
+# Ignore version management scripts
+npm-app/update-version.js
+npm-app/check-version.js
+
 # End of .gitignore file
