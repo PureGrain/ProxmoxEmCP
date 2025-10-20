@@ -31,14 +31,21 @@ FROM alpine:latest
 # Set working directory
 WORKDIR /app
 
-# Install runtime dependencies
-RUN apk update && apk add --no-cache python3 py3-pip
+# Install runtime dependencies and create non-root user
+RUN apk update && apk add --no-cache python3 py3-pip \
+    && addgroup -g 1001 -S mcp \
+    && adduser -u 1001 -S mcp -G mcp \
+    && rm -rf /var/cache/apk/*
 
-# Install Docker Scout for CVE scanning
+# Install Docker Scout for CVE scanning (if needed in runtime)
+# Note: Consider if docker is actually needed in runtime
 RUN apk add --no-cache docker
 
 # Copy application files from builder stage
 COPY --from=builder /app /app
+
+# Ensure proper ownership of application files
+RUN chown -R mcp:mcp /app
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
@@ -53,5 +60,8 @@ LABEL org.opencontainers.image.version="1.0.0"
 LABEL org.opencontainers.image.revision="git-commit-sha"
 LABEL org.opencontainers.image.created="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
 
-# Run the application
-CMD ["python3", "mcp_server.py"]
+# Switch to non-root user
+USER mcp
+
+# Run the application (fixing the typo - should be mcp_server_stdio.py)
+CMD ["python3", "mcp_server_stdio.py"]

@@ -42,8 +42,9 @@ jobs:
           push: true
           tags: puregrain/proxmox-emcp:latest
           platforms: linux/amd64,linux/arm64
-          # Generate provenance attestations
+          # Generate provenance and SBOM attestations
           provenance: mode=max
+          sbom: true
 
       # Docker Scout Analysis
       - name: Docker Scout CVE scan
