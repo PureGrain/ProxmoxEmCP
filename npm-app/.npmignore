@@ -2,7 +2,6 @@
 PUBLISHING.internal.md
 npm-app/MIGRATION_PLAN.md
 
-
 # Source files (if any exist in future)
 src/
 *.ts
@@ -58,12 +57,9 @@ npm-debug.log*
 # This ensures it is not included in the npm package
 test-cli.js
 
-# Exclude additional test scripts
-packages/proxmox-emcp-node/test-cli.js
-packages/proxmox-emcp-node/test-server.js
-
-# Ignore version and test scripts
+# Exclude additional test and utility scripts
 check-version.js
 update-version.js
 *.test.js
 *.spec.js
+npm-app/check-version.js

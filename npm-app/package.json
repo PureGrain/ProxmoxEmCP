@@ -8,11 +8,7 @@
     "proxmox-emcp-node": "./index.js"
   },
   "scripts": {
-    "start": "node index.js",
-    "test": "node test-cli.js",
-    "check-version": "node check-version.js",
-    "preversion": "node check-version.js",
-    "prepublishOnly": "node check-version.js"
+    "start": "node index.js"
   },
   "author": "PureGrain at SLA Ops, LLC",
   "license": "MIT",
@@ -21,9 +17,7 @@
     "axios": "^1.7.9",
     "dotenv": "^16.4.7"
   },
-  "devDependencies": {
-    "@types/node": "^20.0.0"
-  },
+  "devDependencies": {},
   "keywords": [
     "proxmox",
     "mcp",

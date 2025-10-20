@@ -1,36 +1,29 @@
-
-## [0.4.4] - 2025-10-20
-
-### Changed
-- Updated version to 0.4.4 for consistency
-- Minor fixes and improvements
+# Changelog
 
 ## [0.4.5] - 2025-10-20
 
-### Changed
+### Changes in Version 0.4.5
+
 - Updated version to 0.4.5 for consistency
 - Minor fixes and improvements
-# Changelog
 
-All notable changes to @puregrain/proxmox-emcp-node will be documented in this file.
+## [0.4.4] - 2025-10-19
 
-## [0.4.4] - 2025-10-20
-
-### Changed
+### Changes in Version 0.4.4
 
 - Updated version to 0.4.4 for consistency
 - Minor fixes and improvements
 
-## [0.4.3] - 2025-10-20
+## [0.4.3] - 2025-10-18
 
-### Changed
+### Changes in Version 0.4.3
 
 - Updated version to 0.4.3 for consistency
 - Minor fixes and improvements
 
-## [0.4.2] - 2025-10-19
+## [0.4.2] - 2025-10-17
 
-### Added
+### New Features in 0.4.2
 
 - **New `get_help` Tool** - Comprehensive help documentation system
   - Returns structured documentation for all 32 available tools
@@ -39,23 +32,23 @@ All notable changes to @puregrain/proxmox-emcp-node will be documented in this f
   - Provides visual icons for better readability
   - Makes tool discovery explicit rather than AI-interpreted
 
-### Enhanced
+### Enhancements in 0.4.2
 
 - Test suite now validates the help tool functionality
 - Better tool discoverability for AI/LLM consumers
 
-## [0.4.1] - 2025-10-19
+## [0.4.1] - 2025-10-16
 
-### Fixed
+### Fixes in 0.4.1
 
 - Version bump to resolve npm publish conflict (0.4.0 was already published)
 - No functional changes from 0.4.0
 
-## [0.4.0] - 2025-10-19
+## [0.4.0] - 2025-10-15
 
 ### 🎉 Major Update - 35+ New Features
 
-#### Added
+#### Additions in 0.4.0
 
 - **Container Management (8 operations)**
   - `get_containers` - List all LXC containers
@@ -91,34 +84,34 @@ All notable changes to @puregrain/proxmox-emcp-node will be documented in this f
 - **Template Management**
   - `list_templates` - List VM/container templates
 
-#### Changed
+#### Changes in 0.4.0
 
 - **BREAKING**: Environment variables renamed:
   - `PROXMOX_TOKEN_NAME` → `PROXMOX_TOKEN_ID`
   - `PROXMOX_TOKEN_VALUE` → `PROXMOX_TOKEN_SECRET`
 
-#### Technical Details
+#### Technical Details in 0.4.0
 
 - Ported 35+ functions from Python container implementation
 - All functions return raw JSON for optimal AI/LLM consumption
 - Maintained backward compatibility with existing VM operations
 
-## [0.3.7] - 2025-10-17
+## [0.3.7] - 2025-10-14
 
-### Fixed
+### Fixes in 0.3.7
 
 - Updated version to 0.3.7
 
-## [0.3.6] - 2025-10-17
+## [0.3.6] - 2025-10-13
 
-### Fixed
+### Fixes in 0.3.6
 
 - Updated version to 0.3.6
 - Fixed version consistency issues in `check-version.js`
 
 ## [0.3.4] - 2024-12-17
 
-### Added
+### Additions in 0.3.4
 
 - Automatic version consistency checks via `check-version.js`
 - npm lifecycle hooks for version validation:
@@ -126,13 +119,13 @@ All notable changes to @puregrain/proxmox-emcp-node will be documented in this f
   - `prepublishOnly` - Validates before publishing
 - Publishing guide with version management workflow
 
-### Changed
+### Changes in 0.3.4
 
 - Updated package.json scripts for better developer experience
 
-## [0.3.3] - 2024-12-17
+## [0.3.3] - 2024-12-16
 
-### Changed
+### Changes in 0.3.3
 
 - **BREAKING**: Complete rewrite as native Node.js implementation
 - Removed Docker dependency - now runs directly in Node.js
@@ -140,7 +133,7 @@ All notable changes to @puregrain/proxmox-emcp-node will be documented in this f
 - Switched to ES modules (`type: "module"`)
 - Updated MCP SDK dependency to ^1.18.0
 
-### Added
+### Additions in 0.3.3
 
 - Full ProxmoxEmCP server implementation in JavaScript
 - Complete Proxmox API coverage:
@@ -153,34 +146,34 @@ All notable changes to @puregrain/proxmox-emcp-node will be documented in this f
 - Environment variable validation with helpful error messages
 - Comprehensive logging to stderr (avoids stdio conflict)
 
-### Fixed
+### Fixes in 0.3.3
 
 - MCP protocol compatibility with proper request schemas
 - Server capabilities declaration for tools support
 - Connection issues with MCPO and other MCP orchestrators
 
-## [0.3.2] - 2024-12-17
+## [0.3.2] - 2024-12-15
 
-### Added
+### Additions in 0.3.2
 
 - Docker wrapper implementation
 - Basic MCP server functionality via Docker container
 - Environment variable passing to Docker
 
-### Known Issues
+### Known Issues in 0.3.2
 
 - Connection closed errors with some MCP orchestrators
 - Required Docker to be installed and running
 
-## [0.3.1] - 2024-12-16
+## [0.3.1] - 2024-12-14
 
-### Added
+### Additions in 0.3.1
 
 - Initial npm package setup
 - Basic Docker wrapper script
 
-## [0.3.0] - 2024-12-16
+## [0.3.0] - 2024-12-13
 
-### Added
+### Additions in 0.3.0
 
 - Initial release with Docker-based approach

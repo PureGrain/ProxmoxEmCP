@@ -169,6 +169,19 @@ The ProxmoxEmCP server now exposes 35+ tools across multiple categories:
 
 ## Changelog
 
+### v0.4.4 (2025-10-19) - MAJOR UPDATE
+
+**🚀 35+ New Features Added!**
+
+- **Container Management**: Full LXC container support (8 operations)
+- **Enhanced Cluster Status**: Resource totals, VM/container counts, quorum status
+- **Storage Management**: Detailed storage info, NFS support, backup listings
+- **User Access Control**: Users, groups, and roles management
+- **Network & Security**: Network configuration and firewall rules
+- **Advanced Monitoring**: Task history and cluster logs
+- **Template Management**: List VM/container templates
+- **Environment Variables**: Changed to `PROXMOX_TOKEN_ID` and `PROXMOX_TOKEN_SECRET`
+
 ### v0.4.2 (2025-10-19)
 
 - Added `get_help` tool for comprehensive documentation

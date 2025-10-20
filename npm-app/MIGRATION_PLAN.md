@@ -1,17 +1,20 @@
 # ProxmoxEmCP Container → npm-app Migration Plan
 
 ## Overview
+
 We're porting 35+ features from the Python container to the Node.js npm app. This document outlines the implementation strategy.
 
 ## Current State Analysis
 
 ### Container (Python) Structure
+
 - Uses `proxmoxer` library with direct API calls
 - Environment vars: `PROXMOX_TOKEN_ID` and `PROXMOX_TOKEN_SECRET`
 - Returns raw JSON for AI consumption
 - 35+ functions across multiple domains
 
 ### npm-app (Node.js) Structure
+
 - Uses `axios` for HTTP requests
 - Environment vars: `PROXMOX_TOKEN_NAME` and `PROXMOX_TOKEN_VALUE`
 - Already has `apiCall()` helper method
@@ -20,6 +23,7 @@ We're porting 35+ features from the Python container to the Node.js npm app. Thi
 ## Migration Strategy
 
 ### Phase 1: Container Management (Day 1)
+
 **8 Functions to Port:**
 
 1. `getContainers()` - List all LXC containers
@@ -34,6 +38,7 @@ We're porting 35+ features from the Python container to the Node.js npm app. Thi
 **Code Translation Example:**
 
 Python (Container):
+
 ```python
 def get_containers(self) -> Dict[str, Any]:
     nodes = self.proxmox.nodes.get()
@@ -48,6 +53,7 @@ def get_containers(self) -> Dict[str, Any]:
 ```
 
 JavaScript (npm-app):
+
 ```javascript
 async getContainers() {
     const nodes = await this.apiCall('GET', '/nodes');
@@ -67,55 +73,73 @@ async getContainers() {
 ```
 
 ### Phase 2: Enhanced Cluster Status (Day 1)
+
 **1 Enhanced Function:**
+
 - `getClusterStatus()` - Comprehensive cluster overview with resource totals
 
 ### Phase 3: Storage & Backup (Day 2)
+
 **3 Functions:**
+
 - `getStorageDetails(storage)` - Detailed storage info
 - `getBackups(storage?, node?)` - List backups
 - `getStorage()` - Already exists, may need enhancement
 
 ### Phase 4: User & Access Control (Day 2)
+
 **3 Functions:**
+
 - `getUsers()` - List all users
 - `getGroups()` - List all groups
 - `getRoles()` - List all roles
 
 ### Phase 5: Network & Firewall (Day 3)
+
 **2 Functions:**
+
 - `getVMNetwork(node, vmid, vm_type)` - Network configuration
 - `getFirewallStatus(node, vmid?)` - Firewall status
 
 ### Phase 6: Monitoring (Day 3)
+
 **2 Functions:**
+
 - `getRecentTasks(node?, limit)` - Recent tasks
 - `getClusterLog(max_lines)` - Cluster logs
 
 ### Phase 7: Templates (Day 3)
+
 **1 Function:**
+
 - `listTemplates()` - List all templates
 
 ## Key Implementation Decisions
 
 ### 1. Environment Variable Strategy
-**Option A: Keep Both (Confusing)**
+
+#### Option A: Keep Both (Confusing)
+
 - Container uses: TOKEN_ID/TOKEN_SECRET
 - npm uses: TOKEN_NAME/TOKEN_VALUE
 
-**Option B: Standardize on Container Names (Recommended)**
+#### Option B: Standardize on Container Names (Recommended)
+
 - Change npm to use TOKEN_ID/TOKEN_SECRET
 - More consistent with Proxmox terminology
 - One-time breaking change
 
-**Option C: Support Both with Fallback**
+#### Option C: Support Both with Fallback
+
 ```javascript
 this.tokenName = process.env.PROXMOX_TOKEN_ID || process.env.PROXMOX_TOKEN_NAME;
 this.tokenValue = process.env.PROXMOX_TOKEN_SECRET || process.env.PROXMOX_TOKEN_VALUE;
 ```
 
 ### 2. Error Handling Pattern
+
 Both use similar patterns - return object with error key:
+
 ```javascript
 // Consistent pattern
 if (error) {
@@ -124,7 +148,9 @@ if (error) {
 ```
 
 ### 3. Tool Registration
+
 Each new function needs MCP tool registration:
+
 ```javascript
 {
     name: 'get_containers',
@@ -136,15 +162,19 @@ Each new function needs MCP tool registration:
 ## Implementation Approach
 
 ### Step 1: Environment Variables
+
 First, update the npm app to handle the naming difference.
 
 ### Step 2: Add Container Functions
+
 Port the 8 container management functions one by one.
 
 ### Step 3: Register MCP Tools
+
 Add tool definitions for each new function.
 
 ### Step 4: Test
+
 Test each function with actual Proxmox API.
 
 ## API Endpoint Mapping

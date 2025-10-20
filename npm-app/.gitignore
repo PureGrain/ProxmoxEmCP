@@ -34,9 +34,12 @@ temp/
 tmp/
 
 # Exclude additional test and utility scripts
-packages/proxmox-emcp-node/test-cli.js
-packages/proxmox-emcp-node/test-server.js
 check-version.js
 update-version.js
 *.test.js
 *.spec.js
+
+npm-app/MIGRATION_PLAN.md
+npm-app/check-version.js
+npm-app/test-cli.js
+npm-app/test-server.js
