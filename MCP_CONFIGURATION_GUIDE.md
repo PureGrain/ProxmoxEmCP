@@ -13,6 +13,7 @@ description: Complete guide for configuring ProxmoxEmCP with various MCP orchest
 ## 🚨 Troubleshooting Connection Errors
 
 ### Error: "No such file or directory: 'cmd'"
+
 This error occurs when the orchestrator is configured for Windows but running on Linux/Mac.
 
 **Solution:** Use the correct configuration format for your system (see examples below).
@@ -22,6 +23,7 @@ This error occurs when the orchestrator is configured for Windows but running on
 ### Option 1: Docker (Recommended for all platforms)
 
 **settings.json:**
+
 ```json
 {
   "mcpServers": {
@@ -33,7 +35,7 @@ This error occurs when the orchestrator is configured for Windows but running on
         "-i",
         "-e", "PROXMOX_HOST=192.168.1.100",
         "-e", "PROXMOX_TOKEN_NAME=your-token-name",
-        "-e", "PROXMOX_TOKEN_VALUE=your-token-value",
+        "-e", "PROXMOX_TOKEN_VALUE=your-token-value", # pragma: allowlist secret
         "-e", "PROXMOX_USER=root@pam",
         "-e", "PROXMOX_VERIFY_SSL=false",
         "-e", "LOG_LEVEL=INFO",
@@ -47,6 +49,7 @@ This error occurs when the orchestrator is configured for Windows but running on
 ### Option 2: Native Node.js Package (No Docker Required)
 
 **settings.json:**
+
 ```json
 {
   "mcpServers": {
@@ -56,7 +59,7 @@ This error occurs when the orchestrator is configured for Windows but running on
       "env": {
         "PROXMOX_HOST": "192.168.1.100",
         "PROXMOX_TOKEN_NAME": "your-token-name",
-        "PROXMOX_TOKEN_VALUE": "your-token-value",
+        "PROXMOX_TOKEN_VALUE": "your-token-value", # pragma: allowlist secret
         "PROXMOX_USER": "root@pam",
         "PROXMOX_VERIFY_SSL": "false",
         "LOG_LEVEL": "INFO"
@@ -69,12 +72,55 @@ This error occurs when the orchestrator is configured for Windows but running on
 ### Option 3: Python Direct (For Development)
 
 **settings.json:**
+
 ```json
 {
   "mcpServers": {
     "proxmox": {
       "command": "python",
       "args": ["path/to/ProxmoxEmCP/mcp_server_stdio.py"],
+      "env": {
+        "PROXMOX_HOST": "192.168.1.100",
+        "PROXMOX_TOKEN_NAME": "your-token-name",
+        "PROXMOX_TOKEN_VALUE": "your-token-value", # pragma: allowlist secret
+        "PROXMOX_USER": "root@pam",
+        "PROXMOX_VERIFY_SSL": "false",
+        "LOG_LEVEL": "INFO"
+      }
+    }
+  }
+}
+```
+
+### Option 4: Windows Command Prompt
+
+**settings.json (Windows only):**
+
+```json
+{
+  "mcpServers": {
+    "proxmox": {
+      "command": "cmd",
+      "args": ["/c", "docker", "run", "--rm", "-i",
+        "-e", "PROXMOX_HOST=192.168.1.100",
+        "-e", "PROXMOX_TOKEN_NAME=your-token-name",
+        "-e", "PROXMOX_TOKEN_VALUE=your-token-value", # pragma: allowlist secret
+        "puregrain/proxmox-emcp:latest"
+      ]
+    }
+  }
+}
+```
+
+### Additional Configuration Examples
+
+#### Example: settings.example.json
+
+```json
+{
+  "mcpServers": {
+    "proxmox": {
+      "image": "puregrain/proxmox-emcp:latest",
       "env": {
         "PROXMOX_HOST": "192.168.1.100",
         "PROXMOX_TOKEN_NAME": "your-token-name",
@@ -88,24 +134,28 @@ This error occurs when the orchestrator is configured for Windows but running on
 }
 ```
 
-### Option 4: Windows Command Prompt
+#### Example: test-mcpo-config.json
 
-**settings.json (Windows only):**
 ```json
 {
   "mcpServers": {
-    "proxmox": {
-      "command": "cmd",
-      "args": ["/c", "docker", "run", "--rm", "-i",
-        "-e", "PROXMOX_HOST=192.168.1.100",
-        "-e", "PROXMOX_TOKEN_NAME=your-token-name",
-        "-e", "PROXMOX_TOKEN_VALUE=your-token-value",
-        "puregrain/proxmox-emcp:latest"
-      ]
+    "proxmox-local": {
+      "command": "npx",
+      "args": ["@puregrain/proxmox-emcp-node"],
+      "env": {
+        "PROXMOX_HOST": "192.168.1.100",
+        "PROXMOX_TOKEN_NAME": "test-token",
+        "PROXMOX_TOKEN_VALUE": "test-token-value",
+        "PROXMOX_USER": "root@pam",
+        "PROXMOX_VERIFY_SSL": "false",
+        "LOG_LEVEL": "INFO"
+      }
     }
   }
 }
 ```
+
+These examples demonstrate how to configure ProxmoxEmCP for different environments. Adjust the values as needed for your setup.
 
 ## Required Environment Variables
 
@@ -122,19 +172,22 @@ All configurations require these environment variables:
 
 ## Verifying Your Configuration
 
-### Test Docker Installation:
+### Test Docker Installation
+
 ```bash
 docker --version
 docker pull puregrain/proxmox-emcp:latest
 ```
 
-### Test Python Installation:
+### Test Python Installation
+
 ```bash
 python --version
 python -c "import mcp; print('MCP SDK installed')"
 ```
 
-### Test Node.js/npm:
+### Test Node.js/npm
+
 ```bash
 node --version
 npx @puregrain/proxmox-emcp-node --version
@@ -143,34 +196,41 @@ npx @puregrain/proxmox-emcp-node --version
 ## Common Issues and Solutions
 
 ### 1. "Command not found" errors
+
 - **Issue**: The command specified in `command` field doesn't exist
 - **Solution**: Verify the command is installed and in PATH
 
 ### 2. "Permission denied" errors
+
 - **Issue**: Docker requires elevated permissions
 - **Solution**: Add user to docker group or use sudo
 
 ### 3. "Connection refused" errors
+
 - **Issue**: Proxmox server not reachable
 - **Solution**: Check PROXMOX_HOST and firewall settings
 
 ### 4. "401 Unauthorized" errors
+
 - **Issue**: Invalid API token
 - **Solution**: Verify token name and value in Proxmox
 
 ## Platform-Specific Notes
 
 ### macOS/Linux
+
 - Use `docker` directly (not `cmd /c docker`)
 - Python usually installed as `python3`
 - May need to use `sudo` for Docker
 
 ### Windows
+
 - Use `cmd /c` prefix for shell commands if needed
 - Python installed as `python` or `py`
 - Docker Desktop must be running
 
 ### WSL (Windows Subsystem for Linux)
+
 - Use Linux configuration format
 - Ensure Docker Desktop is configured for WSL2
 - Use Linux paths, not Windows paths
@@ -180,4 +240,4 @@ npx @puregrain/proxmox-emcp-node --version
 1. Check logs: `docker logs <container_id>`
 2. Enable debug logging: Set `LOG_LEVEL=DEBUG`
 3. Test connection: `curl -k https://YOUR_PROXMOX_HOST:8006`
-4. GitHub Issues: https://github.com/PureGrain/ProxmoxEmCP/issues
+4. GitHub Issues: <https://github.com/PureGrain/ProxmoxEmCP/issues>
