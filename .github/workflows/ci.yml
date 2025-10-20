@@ -45,7 +45,7 @@ jobs:
 
       - name: Sign Docker image with Cosign
         run: |
-          cosign sign --keyless puregrain/proxmox-emcp:latest
+          C:/Users/PureGrain/scoop/shims/cosign.exe sign --keyless puregrain/proxmox-emcp:latest
         env:
           COSIGN_EXPERIMENTAL: "true"
 

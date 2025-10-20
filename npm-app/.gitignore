@@ -39,7 +39,17 @@ update-version.js
 *.test.js
 *.spec.js
 
-npm-app/MIGRATION_PLAN.md
-npm-app/check-version.js
-npm-app/test-cli.js
-npm-app/test-server.js
+# Internal documentation
+MIGRATION_PLAN.md
+check-version.js
+test-cli.js
+test-server.js
+
+# Workspace-wide exclusions
+logs/
+packages/**/test*.js
+packages/**/tests/
+packages/**/MIGRATION_PLAN.md
+packages/**/check-version.js
+packages/**/test-cli.js
+packages/**/test-server.js
