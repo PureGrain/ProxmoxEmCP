@@ -47,11 +47,12 @@ jobs:
           sbom: true
 
       - name: Attest Docker image
-        uses: ./.github/workflows/attest-build-provenance.yml
+        uses: actions/attest-build-provenance@v1
         with:
-          subject-name: puregrain/proxmox-emcp:latest
+          subject-path: puregrain/proxmox-emcp:latest
           subject-digest: ${{ steps.build-push.outputs.digest }}
           push-to-registry: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       # Docker Scout Analysis
       - name: Docker Scout CVE scan
