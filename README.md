@@ -17,9 +17,9 @@ description: Complete documentation for Proxmox MCP Server implementation
 
 ## 🎬 Project History
 
-Just a few months ago (May 2025, to be exact), we kicked off our first Model Context Protocol (MCP) server for Proxmox in the original ProxmoxMCP repo. It was loaded with features, FastMCP, FastAPI, and enough virtual environments to make your head spin. But hey, times change, and so do we!
+In May 2025, we launched our first Model Context Protocol (MCP) server for Proxmox in the original ProxmoxMCP repository. It was loaded with features, including FastMCP, FastAPI, and numerous virtual environments. However, times change, and so do we.
 
-Now, we’re rolling out ProxmoxEmCP: a fresh, clean rebuild. No more complicated setup, no more FastMCP or FastAPI, and absolutely zero venv drama. Everything lives happily in the root of the container, ready to roll.
+Now, we’re introducing ProxmoxEmCP: a fresh, clean rebuild. No more complicated setup, FastMCP, or FastAPI, and no virtual environment (venv) issues. Everything is streamlined and ready to roll.
 
 [repo_url: ProxmoxEmCP](https://github.com/PureGrain/ProxmoxEmCP)
 
@@ -41,7 +41,7 @@ A containerized MCP (Model Context Protocol) server for managing Proxmox VE thro
 
 ## 🚀 Using from Docker Hub or GitHub Container Registry
 
-You can run ProxmoxEmCP directly from Docker Hub or GitHub Container Registry (GHCR) without cloning the repo.
+You can run ProxmoxEmCP directly from Docker Hub or GitHub Container Registry (GHCR) without cloning the repository.
 
 ### Docker Hub
 
@@ -51,7 +51,7 @@ Pull the image:
 docker pull puregrain/proxmox-emcp:latest
 ```
 
-Run the container (replace values with your actual credentials):
+Run the container, replacing the placeholders with your actual credentials:
 
 ```bash
 docker run -d \
@@ -154,7 +154,7 @@ To connect an AI agent (like Claude, Cline, or any MCP-compatible orchestrator) 
 }
 ```
 
-- Replace the values with your actual Proxmox credentials.
+- Replace the placeholders with your actual Proxmox credentials.
 - The env block passes environment variables to the container at launch.
 - The image field tells the orchestrator which Docker image to use.
 
@@ -312,7 +312,7 @@ env | grep PROXMOX
 
 ## Troubleshooting
 
-### Server won't start
+### Server does not start
 
 - Check environment variables are set correctly
 - Verify Proxmox host is reachable
@@ -333,7 +333,7 @@ docker logs proxmox-mcp
 
 - API tokens are more secure than passwords
 - Use environment variables or Docker secrets for credentials
-- Never commit `.env` files to version control
+- Do not commit `.env` files to version control
 - Consider network isolation for production deployments
 - Use SSL verification in production environments
 
@@ -437,7 +437,7 @@ docker run --rm -p 8811:8811 --env-file .env proxmox-emcp
 
 - Addressed issues with unapproved and outdated base images.
 
-- Enhanced supply chain security by using a non-root user and adding metadata.
+- Improved supply chain security by implementing a non-root user and adding metadata.
 
 ## Documentation
 
