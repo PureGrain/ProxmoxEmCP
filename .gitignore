@@ -166,5 +166,18 @@ persistent_configs/
 datasets/
 containers/
 
+# Ignore unnecessary files and directories
+packages/proxmox-emcp-node/
+tests/
+.dockerignore
+.pre-commit-config.yaml
+
+# Ignore unnecessary files in npm-app
+npm-app/.npmignore
+npm-app/MIGRATION_PLAN.md
+npm-app/cli.cjs
+npm-app/package-lock.json
+npm-app/test-cli.js
+npm-app/test-server.js
 
 # End of .gitignore file
