@@ -1,57 +1,63 @@
-<!--
-title: Proxmox MCP Server Documentation
-author: PureGrain at SLA Ops, LLC
-author_url: https://github.com/PureGrain
-repo_url: https://github.com/PureGrain/ProxmoxMCP
-funding_url: https://github.com/sponsors/PureGrain
-license: MIT
-description: Complete documentation for Proxmox MCP Server implementation
--->
+# Proxmox MCP Server
 
-# Proxmox MCP Server - Clean Implementation
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/PureGrain?label=Sponsor&logo=GitHub-Sponsors&style=for-the-badge)](https://github.com/sponsors/PureGrain)
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Support-yellow?style=for-the-badge&logo=buy-me-a-coffee)](https://buymeacoffee.com/puregrain)
 
-[![CI](https://github.com/PureGrain/ProxmoxEmCP/actions/workflows/ci.yml/badge.svg)](https://github.com/PureGrain/ProxmoxEmCP/actions/workflows/ci.yml)
+[![Docker Build](https://github.com/PureGrain/ProxmoxEmCP/actions/workflows/docker-multiarch.yml/badge.svg)](https://github.com/PureGrain/ProxmoxEmCP/actions/workflows/docker-multiarch.yml)
+[![NPM Publish](https://github.com/PureGrain/ProxmoxEmCP/actions/workflows/publish-npm.yml/badge.svg)](https://github.com/PureGrain/ProxmoxEmCP/actions/workflows/publish-npm.yml)
 [![Docker Pulls](https://img.shields.io/docker/pulls/puregrain/proxmox-emcp?logo=docker)](https://hub.docker.com/r/puregrain/proxmox-emcp)
+[![NPM Version](https://img.shields.io/npm/v/@puregrain/proxmox-emcp-node?logo=npm)](https://www.npmjs.com/package/@puregrain/proxmox-emcp-node)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Security: Dependabot](https://img.shields.io/badge/dependabot-enabled-brightgreen?logo=dependabot)](https://github.com/PureGrain/ProxmoxEmCP/security/dependabot)
 
-## 🎬 Project History
+A Model Context Protocol (MCP) server for managing Proxmox VE infrastructure through AI assistants. Available as an npm package, Docker container, or standalone Python application.
 
-In May 2025, we launched our first Model Context Protocol (MCP) server for Proxmox in the original ProxmoxMCP repository. It was loaded with features, including FastMCP, FastAPI, and numerous virtual environments. However, times change, and so do we.
+## Project Background
 
-Now, we’re introducing ProxmoxEmCP: a fresh, clean rebuild. No more complicated setup, FastMCP, or FastAPI, and no virtual environment (venv) issues. Everything is streamlined and ready to roll.
+In May 2025, we launched the original ProxmoxMCP server with FastMCP, FastAPI, and virtual environments. Based on community feedback and operational experience, we rebuilt the project as ProxmoxEmCP - a cleaner, simpler implementation that eliminates setup complexity while maintaining full functionality. This version uses the official MCP SDK directly and runs without virtual environment dependencies, making deployment and maintenance significantly easier.
 
-[repo_url: ProxmoxEmCP](https://github.com/PureGrain/ProxmoxEmCP)
+## Table of Contents
 
-A containerized MCP (Model Context Protocol) server for managing Proxmox VE through AI assistants. This implementation uses the official MCP SDK and runs in Docker without virtual environments.
+- [Quick Start](#quick-start)
+  - [npm/npx](#npmnnpx)
+  - [Docker Hub](#docker-hub)
+- [Prerequisites](#prerequisites)
+- [Installation Methods](#installation-methods)
+  - [npm Package](#npm-package)
+  - [Docker Container](#docker-container)
+  - [Local Python](#local-python)
+  - [Open WebUI Integration](#open-webui-integration)
+- [Configuration](#configuration)
+  - [Environment Variables](#environment-variables)
+  - [Creating API Token](#creating-api-token)
+- [AI Agent Integration](#ai-agent-integration)
+- [Available MCP Tools](#available-mcp-tools)
+  - [Node Management](#node-management)
+  - [VM Operations](#vm-operations)
+  - [Container Operations](#container-operations-lxc)
+  - [Storage & Backup](#storage--backup)
+  - [Monitoring & Logs](#monitoring--logs)
+  - [Access Control](#access-control)
+  - [Network & Security](#network--security)
+- [Architecture](#architecture)
+- [Development](#development)
+- [Troubleshooting](#troubleshooting)
+- [License](#license)
+- [Support](#support)
 
-## Features
+## Quick Start
 
-- ✅ Official MCP SDK implementation
-- 🐳 Containerized deployment (no venv needed)
-- 🔐 Environment variable configuration
-- 🚀 Simple setup and deployment
-- 📦 Lightweight and efficient
-- 🔧 Full Proxmox VE management capabilities
-- 🆕 LXC Container management
-- 🆕 Enhanced cluster monitoring
-- 🆕 User/Group/Role access control
-- 🆕 Network and firewall management
-- 🆕 Advanced storage and backup features
-
-## 🚀 Using from Docker Hub or GitHub Container Registry
-
-You can run ProxmoxEmCP directly from Docker Hub or GitHub Container Registry (GHCR) without cloning the repository.
-
-### Docker Hub
-
-Pull the image:
+### npm/npx
 
 ```bash
-docker pull puregrain/proxmox-emcp:latest
+# Install globally
+npm install -g @puregrain/proxmox-emcp-node
+
+# Or run directly with npx
+npx @puregrain/proxmox-emcp-node
 ```
 
-Run the container, replacing the placeholders with your actual credentials:
+### Docker Hub
 
 ```bash
 docker run -d \
@@ -62,15 +68,78 @@ docker run -d \
   puregrain/proxmox-emcp:latest
 ```
 
-### GitHub Container Registry (GHCR)
+## Prerequisites
 
-Pull the image:
+- **Proxmox VE**: Version 7.0 or higher with API access enabled
+- **For npm package**: Node.js 18+
+- **For Docker**: Docker Engine installed
+- **For local Python**: Python 3.9+
+- **API Token**: Created in Proxmox with appropriate permissions
+
+## Installation Methods
+
+### npm Package
+
+The npm package provides a native Node.js implementation without Docker requirements.
 
 ```bash
-docker pull ghcr.io/puregrain/proxmox-emcp:latest
+# Install globally
+npm install -g @puregrain/proxmox-emcp-node
+
+# Set environment variables
+export PROXMOX_HOST="192.168.1.100"
+export PROXMOX_TOKEN_ID="your-token-id"
+export PROXMOX_TOKEN_SECRET="your-token-secret"
+
+# Run the server
+proxmox-emcp-node
 ```
 
-Run the container (same as above, just change the image name):
+**Using with npx (no installation required):**
+
+```bash
+PROXMOX_HOST=192.168.1.100 \
+PROXMOX_TOKEN_ID=your-token-id \
+PROXMOX_TOKEN_SECRET=your-token-secret \
+npx @puregrain/proxmox-emcp-node
+```
+
+### Docker Container
+
+#### Using Docker Compose (Recommended)
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/PureGrain/ProxmoxEmCP.git
+cd ProxmoxEmCP
+```
+
+2. Configure environment:
+
+```bash
+cp .env.example .env
+# Edit .env with your Proxmox credentials
+```
+
+3. Start the container:
+
+```bash
+docker-compose up -d
+```
+
+#### Using Docker CLI
+
+```bash
+docker run -d \
+  --name proxmox-emcp \
+  -e PROXMOX_HOST="192.168.1.100" \
+  -e PROXMOX_TOKEN_ID="your-token-id" \
+  -e PROXMOX_TOKEN_SECRET="your-token-secret" \
+  puregrain/proxmox-emcp:latest
+```
+
+#### Using GitHub Container Registry
 
 ```bash
 docker run -d \
@@ -81,94 +150,121 @@ docker run -d \
   ghcr.io/puregrain/proxmox-emcp:latest
 ```
 
-### Required Environment Variables
-
-- `PROXMOX_HOST`: Your Proxmox server IP/hostname (e.g., 192.168.1.100)
-- `PROXMOX_TOKEN_ID`: API token ID from Proxmox
-- `PROXMOX_TOKEN_SECRET`: API token secret from Proxmox
-
-You can also use a `.env` file and Docker Compose for easier management. See below for more details.
-
-## Quick Start
-
-### 1. Clone or Download
+### Local Python
 
 ```bash
-git clone <repository>
+# Clone the repository
+git clone https://github.com/PureGrain/ProxmoxEmCP.git
 cd ProxmoxEmCP
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set environment variables
+export PROXMOX_HOST="192.168.1.100"
+export PROXMOX_TOKEN_ID="your-token-id"
+export PROXMOX_TOKEN_SECRET="your-token-secret"
+
+# Run the server
+python mcp_server_stdio.py
 ```
 
-### 2. Configure Environment Variables
+### Open WebUI Integration
 
-```bash
-cp .env.example .env
-# Edit .env with your Proxmox credentials
-```
+For [Open WebUI](https://openwebui.com/) users, we provide **ProxmoxWeaver** - a specialized tool that brings full Proxmox management capabilities directly into your Open WebUI interface.
 
-Required variables:
+**ProxmoxWeaver** is a native Open WebUI tool that provides the same comprehensive Proxmox VE management features as our MCP server, but specifically designed for the Open WebUI ecosystem.
 
-- `PROXMOX_HOST` - Your Proxmox server IP/hostname (e.g., 192.168.1.100)
-- `PROXMOX_TOKEN_ID` - API token ID from Proxmox
-- `PROXMOX_TOKEN_SECRET` - API token secret from Proxmox
+**Features:**
 
-### 3. Run with Docker Compose
+- Direct integration with Open WebUI's tool system
+- Same powerful Proxmox management capabilities
+- No additional containers or services required
+- Simple installation through Open WebUI's tool marketplace
 
-```bash
-docker-compose up -d
-```
+**Installation:**
 
-### 4. Connect Your AI Assistant
+1. Visit the [ProxmoxWeaver repository](https://github.com/PureGrain/openwebui-stuff/tree/main/tools/proxmoxweaver)
+2. Copy the tool configuration
+3. In Open WebUI, navigate to **Tools** → **Add Tool**
+4. Paste the ProxmoxWeaver configuration
+5. Configure your Proxmox credentials in the tool settings
 
-Configure your AI assistant (Claude, Cline, etc.) to use the MCP server:
+**Usage:**
+
+Once installed, ProxmoxWeaver appears as a native tool in Open WebUI, allowing you to:
+
+- Query and manage VMs and containers
+- Monitor cluster health and resources
+- Execute commands and create snapshots
+- Manage storage, backups, and templates
+- All through natural language interactions in Open WebUI
+
+This integration is perfect for teams already using Open WebUI who want to add Proxmox management capabilities without additional infrastructure.
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `PROXMOX_HOST` | Yes | - | Proxmox server IP or hostname |
+| `PROXMOX_TOKEN_ID` | Yes | - | API token ID |
+| `PROXMOX_TOKEN_SECRET` | Yes | - | API token secret |
+| `PROXMOX_USER` | No | root@pam | Proxmox user |
+| `PROXMOX_VERIFY_SSL` | No | false | Verify SSL certificates |
+| `LOG_LEVEL` | No | INFO | Logging level (DEBUG, INFO, WARNING, ERROR) |
+
+### Creating API Token
+
+1. Log into Proxmox Web UI
+2. Navigate to **Datacenter** → **Permissions** → **API Tokens**
+3. Click **Add** to create a new token
+4. Configure the token:
+   - **User**: Select your user (e.g., root@pam)
+   - **Token ID**: Choose a descriptive name
+   - **Privilege Separation**: Uncheck for full user permissions
+5. Copy the token secret (shown only once!)
+
+## AI Agent Integration
+
+Configure your AI assistant (Claude Desktop, Cline, or any MCP-compatible client) to connect to the server.
+
+### For npm Package
 
 ```json
 {
   "mcpServers": {
     "proxmox": {
-      "command": "docker",
-      "args": ["attach", "proxmox-mcp"]
-    }
-  }
-}
-```
-
-## 🤖 AI Agent Integration
-
-To connect an AI agent (like Claude, Cline, or any MCP-compatible orchestrator) to your ProxmoxEmCP server, use a settings.json like this:
-
-```json
-{
-  "mcpServers": {
-    "proxmox": {
-      "image": "puregrain/proxmox-emcp:latest",
+      "command": "npx",
+      "args": ["@puregrain/proxmox-emcp-node"],
       "env": {
         "PROXMOX_HOST": "192.168.1.100",
         "PROXMOX_TOKEN_ID": "your-token-id",
-        "PROXMOX_TOKEN_SECRET": "your-token-secret",
-        "PROXMOX_USER": "root@pam",
-        "PROXMOX_VERIFY_SSL": "false",
-        "LOG_LEVEL": "INFO"
+        "PROXMOX_TOKEN_SECRET": "your-token-secret"
       }
     }
   }
 }
 ```
 
-- Replace the placeholders with your actual Proxmox credentials.
-- The env block passes environment variables to the container at launch.
-- The image field tells the orchestrator which Docker image to use.
+### For Docker Container
 
-See the included `settings.example.json` file for a ready-to-edit template.
-
-## Creating Proxmox API Token
-
-1. Log into Proxmox Web UI
-2. Go to Datacenter → Permissions → API Tokens
-3. Click "Add" and create a new token:
-   - User: root@pam (or your user)
-   - Token ID: choose a name
-   - Privilege Separation: Unchecked (for full access)
-4. Copy the token value (shown only once!)
+```json
+{
+  "mcpServers": {
+    "proxmox": {
+      "command": "docker",
+      "args": ["attach", "proxmox-emcp"],
+      "env": {
+        "PROXMOX_HOST": "192.168.1.100",
+        "PROXMOX_TOKEN_ID": "your-token-id",
+        "PROXMOX_TOKEN_SECRET": "your-token-secret"
+      }
+    }
+  }
+}
+```
 
 ## Available MCP Tools
 
@@ -185,109 +281,44 @@ See the included `settings.example.json` file for a ready-to-edit template.
 - `stop_vm` - Stop a virtual machine gracefully
 - `reboot_vm` - Reboot a virtual machine
 - `execute_vm_command` - Execute commands via QEMU guest agent
+- `create_vm_snapshot` - Create a VM snapshot
+- `list_vm_snapshots` - List all snapshots for a VM
+- `get_vm_network` - Get VM network configuration
 
 ### Container Operations (LXC)
 
-- `get_containers` - List all LXC containers across the cluster
+- `get_containers` - List all LXC containers
 - `get_container_status` - Get container status and configuration
 - `start_container` - Start a container
 - `stop_container` - Stop a container gracefully
 - `reboot_container` - Reboot a container
 - `execute_container_command` - Execute commands in container
 - `create_container_snapshot` - Create a container snapshot
-- `list_container_snapshots` - List all snapshots for a container
-
-### Snapshot Management
-
-- `create_vm_snapshot` - Create a VM snapshot
-- `list_vm_snapshots` - List all snapshots for a VM
+- `list_container_snapshots` - List container snapshots
 
 ### Storage & Backup
 
 - `get_storage` - List storage pools
 - `get_storage_details` - Get detailed storage pool information
-- `get_backups` - List backup files with filtering options
+- `get_backups` - List backup files with filtering
+- `list_templates` - List VM and container templates
 
-### Cluster & Monitoring
+### Monitoring & Logs
 
-- `get_cluster_status` - Get comprehensive cluster health and resource summary
+- `get_cluster_status` - Get comprehensive cluster health and resources
 - `get_task_status` - Check Proxmox task status
-- `get_recent_tasks` - List recent tasks across the cluster
+- `get_recent_tasks` - List recent tasks with filtering
 - `get_cluster_log` - Get cluster-wide log entries
 
-### User & Access Control
+### Access Control
 
-- `get_users` - List all users in the cluster
-- `get_groups` - List all groups in the cluster
+- `get_users` - List all users with groups and tokens
+- `get_groups` - List all groups with members
 - `get_roles` - List all roles and privileges
 
 ### Network & Security
 
-- `get_vm_network` - Get network configuration for VMs/containers
 - `get_firewall_status` - Get firewall status and rules
-
-### Templates
-
-- `list_templates` - List all VM and container templates
-
-## Alternative Deployment Methods
-
-### Run with Docker (without Compose)
-
-```bash
-docker build -t proxmox-mcp .
-docker run -it \
-  -e PROXMOX_HOST=192.168.1.100 \
-  -e PROXMOX_TOKEN_ID=your-token \
-  -e PROXMOX_TOKEN_SECRET=your-token-secret \
-  proxmox-mcp
-```
-
-### Run Locally (without Docker)
-
-```bash
-pip install -r requirements.txt
-export PROXMOX_HOST=192.168.1.100
-export PROXMOX_TOKEN_ID=your-token
-export PROXMOX_TOKEN_SECRET=your-token-secret
-
-# For MCP clients (Claude Desktop, MCPO, etc.) - uses stdio transport
-python mcp_server_stdio.py
-
-# For HTTP API access (standalone REST API) - uses HTTP transport
-# python mcp_server_http.py  # Available but not primary
-```
-
-## Environment Variables
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `PROXMOX_HOST` | Yes | - | Proxmox server IP/hostname |
-| `PROXMOX_TOKEN_ID` | Yes | - | API token ID |
-| `PROXMOX_TOKEN_SECRET` | Yes | - | API token secret |
-| `PROXMOX_USER` | No | root@pam | Proxmox user |
-| `PROXMOX_VERIFY_SSL` | No | false | Verify SSL certificates |
-| `LOG_LEVEL` | No | INFO | Logging level |
-
-## Modifying Configuration After Deployment
-
-Since configuration is via environment variables, you can:
-
-**Update and restart the container:**
-
-```bash
-docker-compose down
-# Edit .env file
-docker-compose up -d
-```
-
-**Or use docker exec to check/modify:**
-
-```bash
-docker exec -it proxmox-mcp /bin/bash
-# Check current config
-env | grep PROXMOX
-```
 
 ## Architecture
 
@@ -299,10 +330,10 @@ env | grep PROXMOX
          │ MCP Protocol
          ▼
 ┌─────────────────┐
-│  MCP Server     │
-│  (Python/Docker)│
+│   MCP Server    │
+│  (Node/Python)  │
 └────────┬────────┘
-         │ API Calls
+         │ REST API
          ▼
 ┌─────────────────┐
 │  Proxmox VE     │
@@ -310,135 +341,87 @@ env | grep PROXMOX
 └─────────────────┘
 ```
 
-## Troubleshooting
-
-### Server does not start
-
-- Check environment variables are set correctly
-- Verify Proxmox host is reachable
-- Confirm API token has proper permissions
-
-### Connection errors
-
-- Ensure `PROXMOX_VERIFY_SSL=false` if using self-signed certificates
-- Check firewall allows connection to Proxmox port 8006
-
-### View logs
-
-```bash
-docker logs proxmox-mcp
-```
-
-## Security Considerations
-
-- API tokens are more secure than passwords
-- Use environment variables or Docker secrets for credentials
-- Do not commit `.env` files to version control
-- Consider network isolation for production deployments
-- Use SSL verification in production environments
-
 ## Development
 
-To modify or extend the server:
+### Contributing
 
-1. Edit `mcp_server_stdio.py` (for MCP clients) or `mcp_server_http.py` (for HTTP API)
-2. Rebuild the Docker image: `docker-compose build`
-3. Restart the container: `docker-compose up -d`
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests: `npm test` or `python -m pytest`
+5. Submit a pull request
 
-**Note:** The Docker container uses `mcp_server_stdio.py` by default for MCP compatibility.
+### Pre-commit Hooks
 
-## 🛠️ Development & Contribution
-
-### Pre-commit Hooks (Linting & Secrets)
-
-This project uses [pre-commit](https://pre-commit.com/) to automate code style, linting, and secrets scanning before every commit.
-
-**To set up pre-commit hooks locally:**
+This project uses pre-commit for code quality:
 
 ```bash
 pip install pre-commit
 pre-commit install
-```
-
-**To run all hooks manually:**
-
-```bash
 pre-commit run --all-files
 ```
 
 Hooks include:
 
-- `black` (Python code formatter)
-- `flake8` (Python linter)
-- `detect-secrets` (secret scanning)
-- Common whitespace and YAML checks
+- `black` - Python code formatter
+- `flake8` - Python linter
+- `detect-secrets` - Secret scanning
+- YAML and whitespace validation
 
-If a hook fails, fix the reported issues and re-commit.
+### Building Docker Image
 
-See `.pre-commit-config.yaml` for details.
+```bash
+docker build -t proxmox-emcp .
+```
+
+### Modifying the Server
+
+- **Node.js version**: Edit files in `npm-app/`
+- **Python version**: Edit `mcp_server_stdio.py`
+- **Docker config**: Edit `Dockerfile` and `docker-compose.yml`
+
+## Troubleshooting
+
+### Connection Issues
+
+- **Verify Proxmox is reachable**: `ping <PROXMOX_HOST>`
+- **Check API port**: Ensure port 8006 is accessible
+- **SSL certificates**: Set `PROXMOX_VERIFY_SSL=false` for self-signed certs
+
+### Authentication Failures
+
+- **Token permissions**: Ensure token has required permissions
+- **Token format**: Verify `TOKEN_ID` and `TOKEN_SECRET` are correct
+- **User privileges**: Check user has appropriate Proxmox permissions
+
+### Viewing Logs
+
+```bash
+# Docker logs
+docker logs proxmox-emcp
+
+# npm/Node.js - set LOG_LEVEL
+LOG_LEVEL=DEBUG npx @puregrain/proxmox-emcp-node
+```
+
+### Common Issues
+
+- **"Connection refused"**: Check firewall and Proxmox API service
+- **"Unauthorized"**: Verify token credentials
+- **"SSL verification failed"**: Set `PROXMOX_VERIFY_SSL=false`
 
 ## License
 
-MIT License - See LICENSE file for details
+MIT License - See [LICENSE](LICENSE) file for details
 
 ## Support
 
-For issues or questions:
+- **Issues**: [GitHub Issues](https://github.com/PureGrain/ProxmoxEmCP/issues)
+- **Documentation**: [MCP Configuration Guide](MCP_CONFIGURATION_GUIDE.md)
+- **Sponsor**: [GitHub Sponsors](https://github.com/sponsors/PureGrain)
+- **Buy Me A Coffee**: [Support Development](https://buymeacoffee.com/puregrain)
 
-1. Check the troubleshooting section
-2. Review Proxmox API documentation
-3. Verify MCP protocol compatibility
+---
 
-# Proxmox MCP Server
-
-## Overview
-
-Proxmox MCP Server is a lightweight containerized application for managing and monitoring Proxmox VMs and nodes using the official MCP SDK.
-
-## Updates
-
-### Version 2.1.0
-
-- **Base Image**: Switched to Alpine (`python:3.14-alpine`) for reduced image size and improved security.
-
-- **Package Manager**: Replaced `apt-get` commands with `apk` equivalents.
-
-- **Environment Variables**:
-
-  - Required:
-
-    - `PROXMOX_HOST`: Proxmox server address (e.g., `192.168.1.100`).
-
-    - `PROXMOX_TOKEN_NAME`: API token name.
-
-    - `PROXMOX_TOKEN_VALUE`: API token value.
-
-  - Optional:
-
-    - `PROXMOX_USER`: Defaults to `root@pam`.
-
-    - `PROXMOX_VERIFY_SSL`: Defaults to `false`.
-
-    - `LOG_LEVEL`: Defaults to `INFO`.
-
-- **Port Mapping**: Default port is `8811`. Update the `docker run` command to map this port correctly.
-
-## Running the Container
-
-### Example Command
-
-```bash
-
-docker run --rm -p 8811:8811 --env-file .env proxmox-emcp
-
-```
-
-## Scout Health Score Improvements
-
-- Addressed issues with unapproved and outdated base images.
-
-- Improved supply chain security by implementing a non-root user and adding metadata.
-
-## Documentation
-
-Refer to the `.env` file for environment variable configuration.
+**Author**: PureGrain at SLA Ops, LLC
+**Repository**: [github.com/PureGrain/ProxmoxEmCP](https://github.com/PureGrain/ProxmoxEmCP)
