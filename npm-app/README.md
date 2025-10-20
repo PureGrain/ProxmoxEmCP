@@ -169,29 +169,19 @@ The ProxmoxEmCP server now exposes 35+ tools across multiple categories:
 
 ## Changelog
 
-### v0.4.4 (2025-10-20)
-
-- Updated version to 0.4.4 for consistency
-- Minor fixes and improvements
-
-### v0.4.4 (2025-10-20)
-
-- Updated version to 0.4.3 for consistency
-- Minor fixes and improvements
-
-### v0.4.4 (2025-10-19)
+### v0.4.2 (2025-10-19)
 
 - Added `get_help` tool for comprehensive documentation
 - Provides structured documentation for all 32 available tools
 - Organized by categories with descriptions and usage examples
 - Enhanced tool discoverability for AI/LLM consumers
 
-### v0.4.4 (2025-10-19)
+### v0.4.1 (2025-10-19)
 
 - Version bump to resolve npm publish conflict
 - No functional changes from v0.4.0
 
-### v0.4.4 (2025-10-19) - MAJOR UPDATE
+### v0.4.0 (2025-10-19) - MAJOR UPDATE
 
 **🚀 35+ New Features Added!**
 
@@ -204,17 +194,17 @@ The ProxmoxEmCP server now exposes 35+ tools across multiple categories:
 - **Template Management**: List VM/container templates
 - **Environment Variables**: Changed to `PROXMOX_TOKEN_ID` and `PROXMOX_TOKEN_SECRET`
 
-### v0.4.4 (2025-10-17)
+### v0.3.7 (2025-10-17)
 
 - Updated version to 0.3.7
 - Fixed version consistency issues in `check-version.js`
 
-### v0.4.4 (2024-12-17)
+### v0.3.4 (2024-12-17)
 
 - Added automatic version consistency checks
 - Added publishing safeguards to prevent version mismatches
 
-### v0.4.4 (2024-12-17)
+### v0.3.3 (2024-12-17)
 
 - Complete rewrite as native Node.js implementation
 - Removed Docker dependency
@@ -222,7 +212,7 @@ The ProxmoxEmCP server now exposes 35+ tools across multiple categories:
 - Improved error handling and logging
 - Updated MCP SDK to ^1.18.0
 
-### v0.4.4 and earlier
+### v0.3.2 and earlier
 
 - Docker wrapper implementation (deprecated)
 
