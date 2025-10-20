@@ -32,3 +32,11 @@ coverage/
 *.tmp
 temp/
 tmp/
+
+# Exclude additional test and utility scripts
+packages/proxmox-emcp-node/test-cli.js
+packages/proxmox-emcp-node/test-server.js
+check-version.js
+update-version.js
+*.test.js
+*.spec.js

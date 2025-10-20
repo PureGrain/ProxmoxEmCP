@@ -1,10 +1,37 @@
+
+## [0.4.4] - 2025-10-20
+
+### Changed
+- Updated version to 0.4.4 for consistency
+- Minor fixes and improvements
+
+## [0.4.5] - 2025-10-20
+
+### Changed
+- Updated version to 0.4.5 for consistency
+- Minor fixes and improvements
 # Changelog
 
 All notable changes to @puregrain/proxmox-emcp-node will be documented in this file.
 
+## [0.4.4] - 2025-10-20
+
+### Changed
+
+- Updated version to 0.4.4 for consistency
+- Minor fixes and improvements
+
+## [0.4.3] - 2025-10-20
+
+### Changed
+
+- Updated version to 0.4.3 for consistency
+- Minor fixes and improvements
+
 ## [0.4.2] - 2025-10-19
 
 ### Added
+
 - **New `get_help` Tool** - Comprehensive help documentation system
   - Returns structured documentation for all 32 available tools
   - Organized by categories (Node, VM, Container, Storage, Cluster, Network, User Management)
@@ -13,20 +40,23 @@ All notable changes to @puregrain/proxmox-emcp-node will be documented in this f
   - Makes tool discovery explicit rather than AI-interpreted
 
 ### Enhanced
+
 - Test suite now validates the help tool functionality
 - Better tool discoverability for AI/LLM consumers
 
 ## [0.4.1] - 2025-10-19
 
 ### Fixed
+
 - Version bump to resolve npm publish conflict (0.4.0 was already published)
 - No functional changes from 0.4.0
 
 ## [0.4.0] - 2025-10-19
 
-### 🎉 Major Update - 35+ New Features!
+### 🎉 Major Update - 35+ New Features
 
 #### Added
+
 - **Container Management (8 operations)**
   - `get_containers` - List all LXC containers
   - `get_container_status` - Container status & config
@@ -62,11 +92,13 @@ All notable changes to @puregrain/proxmox-emcp-node will be documented in this f
   - `list_templates` - List VM/container templates
 
 #### Changed
+
 - **BREAKING**: Environment variables renamed:
   - `PROXMOX_TOKEN_NAME` → `PROXMOX_TOKEN_ID`
   - `PROXMOX_TOKEN_VALUE` → `PROXMOX_TOKEN_SECRET`
 
 #### Technical Details
+
 - Ported 35+ functions from Python container implementation
 - All functions return raw JSON for optimal AI/LLM consumption
 - Maintained backward compatibility with existing VM operations
