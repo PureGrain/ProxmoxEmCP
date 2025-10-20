@@ -34,8 +34,17 @@ WORKDIR /app
 # Install runtime dependencies
 RUN apk update && apk add --no-cache python3 py3-pip
 
+# Install Docker Scout for CVE scanning
+RUN apk add --no-cache curl \
+    && curl -fsSL https://get.docker.com -o get-docker.sh \
+    && sh get-docker.sh \
+    && rm get-docker.sh
+
 # Copy application files from builder stage
 COPY --from=builder /app /app
+
+# Generate SARIF file for CVE scanning
+RUN docker scout cves --output sarif > /app/docker-scout-cves.sarif
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
