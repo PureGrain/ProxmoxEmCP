@@ -73,7 +73,6 @@ npm-app/test-cli.js
 npm-app/test-server.js
 
 # Internal documentation
-MIGRATION_PLAN.md
 PUBLISHING.internal.md
 npm-app/MIGRATION_PLAN.md
 
@@ -89,8 +88,6 @@ npm-app/.npmignore
 # Test files
 npm-app/test/
 npm-app/tests/
-npm-app/*.test.js
-npm-app/*.spec.js
 
 # Build artifacts (no longer used)
 npm-app/dist/
@@ -98,32 +95,14 @@ npm-app/dist/
 # Dependencies (shouldn't be in npm package)
 npm-app/node_modules/
 
-# IDE files
-npm-app/.vscode/
-npm-app/.idea/
-*.swp
-*.swo
-
-# OS files
-.DS_Store
-Thumbs.db
-
 # Git files
 .git/
 .github/
 
-# Temporary files
-*.tmp
-*.temp
-temp/
-tmp/
-
 # Environment files
-.env
 .env.*
 
 # Workspace-wide exclusions
-logs/
 packages/**/test*.js
 packages/**/tests/
 packages/**/MIGRATION_PLAN.md
@@ -135,15 +114,6 @@ packages/**/test-server.js
 # Node.js lock files
 yarn.lock
 
-# Ignore npm debug logs
-npm-debug.log*
-
-# Ignore internal documentation
-MIGRATION_PLAN.md
-
-# Python virtual environments
-.venv/
-
 # Ignore dynamically generated SBOM file
 sbom.json
 
@@ -154,7 +124,6 @@ proxmox_weaver_v2-0-2.py
 # Corrected invalid patterns
 archive/
 discussions/
-tests/
 
 # Additional exclusions from workspace audit
 build-context.tar
@@ -168,16 +137,11 @@ containers/
 
 # Ignore unnecessary files and directories
 packages/proxmox-emcp-node/
-tests/
 .dockerignore
 .pre-commit-config.yaml
 
 # Ignore unnecessary files in npm-app
-npm-app/.npmignore
-npm-app/MIGRATION_PLAN.md
 npm-app/cli.cjs
 npm-app/package-lock.json
-npm-app/test-cli.js
-npm-app/test-server.js
 
 # End of .gitignore file
