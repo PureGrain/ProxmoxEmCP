@@ -70,6 +70,10 @@ jobs:
           exit-code: false
           summary: true
 
+      - name: Install Syft
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+
       - name: Generate SBOM
         run: syft packages docker:docker.io/puregrain/proxmox-emcp:latest -o json > sbom.json
 
