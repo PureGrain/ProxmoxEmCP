@@ -49,9 +49,13 @@ jobs:
           chmod +x cosign
           sudo mv cosign /usr/local/bin/
 
+      - name: Get Image Digest
+        id: digest
+        run: echo "::set-output name=digest::$(docker inspect --format='{{index .RepoDigests 0}}' puregrain/proxmox-emcp:latest)"
+
       - name: Sign Docker image with Cosign
         run: |
-          cosign sign puregrain/proxmox-emcp:latest
+          cosign sign ${{ steps.digest.outputs.digest }}
         env:
           COSIGN_EXPERIMENTAL: "true"
           COSIGN_ID_TOKEN: ${{ secrets.GITHUB_TOKEN }}
