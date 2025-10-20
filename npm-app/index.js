@@ -5,7 +5,7 @@
  * author_url: https://github.com/PureGrain
  * repo_url: https://github.com/PureGrain/ProxmoxMCP
  * funding_url: https://github.com/sponsors/PureGrain
- * version: 0.4.6
+ * version: 0.4.7
  * license: MIT
  * description: Native Node.js ProxmoxEmCP server for managing and monitoring Proxmox VMs and nodes.
  */
@@ -1020,7 +1020,7 @@ class ProxmoxManager {
           "LOG_LEVEL - Log level (DEBUG/INFO), defaults to INFO"
         ]
       },
-      version: "0.4.6",
+      version: "0.4.7",
       author: "PureGrain at SLA Ops, LLC",
       license: "MIT"
     };
@@ -1376,7 +1376,7 @@ async function runMCPServer() {
   // Create MCP server
   const server = new Server({
     name: 'ProxmoxEmCP',
-    version: '0.4.6'
+    version: '0.4.7'
   }, {
     capabilities: {
       tools: {}
