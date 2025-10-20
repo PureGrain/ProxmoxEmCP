@@ -54,6 +54,7 @@ jobs:
           cosign sign puregrain/proxmox-emcp:latest
         env:
           COSIGN_EXPERIMENTAL: "true"
+          COSIGN_ID_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   codeql:
     runs-on: ubuntu-latest
