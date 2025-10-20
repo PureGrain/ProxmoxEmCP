@@ -40,9 +40,6 @@ RUN apk add --no-cache docker
 # Copy application files from builder stage
 COPY --from=builder /app /app
 
-# Generate SARIF file for CVE scanning
-RUN docker scout cves --format sarif --output /app/docker-scout-cves.sarif alpine:latest
-
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 
