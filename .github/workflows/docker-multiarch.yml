@@ -9,7 +9,6 @@ on:
       - .github/workflows/docker-multiarch.yml
       - requirements.txt
       - mcp_server_stdio.py
-      - mcp_server_http.py
       - docker-compose.yml
       - README.md
   workflow_dispatch:
