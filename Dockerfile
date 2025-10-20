@@ -45,7 +45,12 @@ USER mcp
 # Run the MCP server
 CMD ["python", "mcp_server_stdio.py"]
 
-# Add supply chain attestation metadata
+# Add OCI labels for attestation metadata
+LABEL org.opencontainers.image.title="Proxmox MCP Server"
+LABEL org.opencontainers.image.description="Docker container for Proxmox MCP Server using official MCP SDK"
+LABEL org.opencontainers.image.authors="PureGrain at SLA Ops, LLC"
 LABEL org.opencontainers.image.source="https://github.com/PureGrain/ProxmoxEmCP"
 LABEL org.opencontainers.image.licenses="MIT"
-LABEL org.opencontainers.image.vendor="PureGrain at SLA Ops, LLC"
+LABEL org.opencontainers.image.version="1.0.0"
+LABEL org.opencontainers.image.revision="git-commit-sha"
+LABEL org.opencontainers.image.created="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"

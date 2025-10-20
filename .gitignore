@@ -85,3 +85,6 @@ npm-debug.log*
 
 # Ignore internal documentation
 npm-app/MIGRATION_PLAN.md
+
+# Ignore dynamically generated SBOM file
+sbom.json
