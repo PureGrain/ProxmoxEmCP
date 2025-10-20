@@ -8,11 +8,11 @@
 # Multi-stage build to optimize image size
 
 # Stage 1: Build
-FROM python:3.13-alpine AS builder
+FROM python:3.13-slim AS builder
 WORKDIR /app
 
 # Install build dependencies and Python packages
-RUN apk update && apk add --no-cache gcc gcompat
+RUN apt-get update && apt-get install -y gcc g++ && rm -rf /var/lib/apt/lists/*
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
