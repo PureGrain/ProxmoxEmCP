@@ -37,6 +37,14 @@ RUN apk update && apk add --no-cache python3 py3-pip
 # Copy application files from builder stage
 COPY --from=builder /app /app
 
+# Create a non-root user and switch to it
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+USER appuser
+
+# Ensure the working directory is owned by the non-root user
+WORKDIR /app
+RUN chown -R appuser:appgroup /app
+
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
 
