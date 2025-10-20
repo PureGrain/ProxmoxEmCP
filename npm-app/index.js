@@ -5,7 +5,7 @@
  * author_url: https://github.com/PureGrain
  * repo_url: https://github.com/PureGrain/ProxmoxMCP
  * funding_url: https://github.com/sponsors/PureGrain
- * version: 0.4.5
+ * version: 0.4.6
  * license: MIT
  * description: Native Node.js ProxmoxEmCP server for managing and monitoring Proxmox VMs and nodes.
  */
@@ -183,11 +183,7 @@ class ProxmoxManager {
 
   async executeVMCommand(node, vmid, command) {
     try {
-      // Include node in the request body as required by Proxmox API
-      const result = await this.apiCall('POST', `/nodes/${node}/qemu/${vmid}/agent/exec`, {
-        node: node,
-        command: command
-      });
+      const result = await this.apiCall('POST', `/nodes/${node}/qemu/${vmid}/agent/exec`, { command });
       if (!result || result.error) {
         return { error: result?.error || 'No response from VM agent' };
       }
@@ -330,11 +326,7 @@ class ProxmoxManager {
 
   async executeContainerCommand(node, vmid, command) {
     try {
-      // Include node in the request body as required by Proxmox API
-      const result = await this.apiCall('POST', `/nodes/${node}/lxc/${vmid}/exec`, {
-        node: node,
-        command: command
-      });
+      const result = await this.apiCall('POST', `/nodes/${node}/lxc/${vmid}/exec`, { command });
       if (!result || result.error) {
         return { error: result?.error || 'No response from container' };
       }
@@ -1028,7 +1020,7 @@ class ProxmoxManager {
           "LOG_LEVEL - Log level (DEBUG/INFO), defaults to INFO"
         ]
       },
-      version: "0.4.5",
+      version: "0.4.6",
       author: "PureGrain at SLA Ops, LLC",
       license: "MIT"
     };
@@ -1384,7 +1376,7 @@ async function runMCPServer() {
   // Create MCP server
   const server = new Server({
     name: 'ProxmoxEmCP',
-    version: '0.4.5'
+    version: '0.4.6'
   }, {
     capabilities: {
       tools: {}
