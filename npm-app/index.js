@@ -5,7 +5,7 @@
  * author_url: https://github.com/PureGrain
  * repo_url: https://github.com/PureGrain/ProxmoxMCP
  * funding_url: https://github.com/sponsors/PureGrain
- * version: 0.4.4
+ * version: 0.4.5
  * license: MIT
  * description: Native Node.js ProxmoxEmCP server for managing and monitoring Proxmox VMs and nodes.
  */
@@ -183,7 +183,11 @@ class ProxmoxManager {
 
   async executeVMCommand(node, vmid, command) {
     try {
-      const result = await this.apiCall('POST', `/nodes/${node}/qemu/${vmid}/agent/exec`, { command });
+      // Include node in the request body as required by Proxmox API
+      const result = await this.apiCall('POST', `/nodes/${node}/qemu/${vmid}/agent/exec`, {
+        node: node,
+        command: command
+      });
       if (!result || result.error) {
         return { error: result?.error || 'No response from VM agent' };
       }
@@ -326,7 +330,11 @@ class ProxmoxManager {
 
   async executeContainerCommand(node, vmid, command) {
     try {
-      const result = await this.apiCall('POST', `/nodes/${node}/lxc/${vmid}/exec`, { command });
+      // Include node in the request body as required by Proxmox API
+      const result = await this.apiCall('POST', `/nodes/${node}/lxc/${vmid}/exec`, {
+        node: node,
+        command: command
+      });
       if (!result || result.error) {
         return { error: result?.error || 'No response from container' };
       }
@@ -1000,8 +1008,13 @@ class ProxmoxManager {
         "List all nodes": "get_nodes",
         "Check VM status": "get_vm_status with parameters: node='pve1', vmid=100",
         "Start a VM": "start_vm with parameters: node='pve1', vmid=100",
-        "Create snapshot": "create_vm_snapshot with parameters: node='pve1', vmid=100, name='backup-2024'",
-        "Get cluster health": "get_cluster_status"
+        "Execute VM command": "execute_vm_command with parameters: node='pve1', vmid=100, command='ls -al /home'",
+        "Execute container command": "execute_container_command with parameters: node='pve1', vmid=200, command='df -h'",
+        "Create VM snapshot": "create_vm_snapshot with parameters: node='pve1', vmid=100, name='backup-2024'",
+        "Create container snapshot": "create_container_snapshot with parameters: node='pve1', vmid=200, name='backup-2024'",
+        "Get cluster health": "get_cluster_status",
+        "List templates": "list_templates",
+        "Get storage details": "get_storage_details with parameters: storage='local-lvm'"
       },
       configuration: {
         "Required environment variables": [
@@ -1015,7 +1028,7 @@ class ProxmoxManager {
           "LOG_LEVEL - Log level (DEBUG/INFO), defaults to INFO"
         ]
       },
-      version: "0.4.1",
+      version: "0.4.5",
       author: "PureGrain at SLA Ops, LLC",
       license: "MIT"
     };
@@ -1371,7 +1384,7 @@ async function runMCPServer() {
   // Create MCP server
   const server = new Server({
     name: 'ProxmoxEmCP',
-    version: '0.4.4'
+    version: '0.4.5'
   }, {
     capabilities: {
       tools: {}

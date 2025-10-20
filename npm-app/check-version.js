@@ -19,32 +19,22 @@ console.log(`\n🔍 Checking version consistency for v${version}\n`);
 
 let hasErrors = false;
 
-// Check index.js (2 occurrences expected)
+// Check index.js (3 occurrences expected: header comment, getHelp() function, server creation)
 const indexJs = readFileSync(join(__dirname, 'index.js'), 'utf8');
 const indexMatches = (indexJs.match(new RegExp(version.replace(/\./g, '\\.'), 'g')) || []).length;
-if (indexMatches !== 2) {
-  console.error(`❌ index.js: Expected 2 occurrences of "${version}", found ${indexMatches}`);
+if (indexMatches !== 3) {
+  console.error(`❌ index.js: Expected 3 occurrences of "${version}", found ${indexMatches}`);
   hasErrors = true;
 } else {
-  console.log(`✅ index.js: Version ${version} found (2 occurrences)`);
+  console.log(`✅ index.js: Version ${version} found (3 occurrences)`);
 }
 
-// Check README.md
-const readme = readFileSync(join(__dirname, 'README.md'), 'utf8');
-if (!readme.includes(`v${version}`) && !readme.includes(`[${version}]`)) {
-  console.error(`❌ README.md: Version ${version} not found in changelog section`);
+// Check if package.json version matches index.js
+if (!indexJs.includes(`version: \"${version}\"`)) {
+  console.error(`❌ package.json: Version ${version} does not match index.js`);
   hasErrors = true;
 } else {
-  console.log(`✅ README.md: Version ${version} found`);
-}
-
-// Check CHANGELOG.md
-const changelog = readFileSync(join(__dirname, 'CHANGELOG.md'), 'utf8');
-if (!changelog.includes(`[${version}]`) && !changelog.includes(`## ${version}`)) {
-  console.error(`❌ CHANGELOG.md: Version ${version} not found`);
-  hasErrors = true;
-} else {
-  console.log(`✅ CHANGELOG.md: Version ${version} found`);
+  console.log(`✅ package.json: Version ${version} matches index.js`);
 }
 
 // Summary

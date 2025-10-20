@@ -1,3 +1,15 @@
+
+## [0.4.5] - 2025-10-20
+
+### Changed
+- Updated version to 0.4.5 for consistency
+- Minor fixes and improvements
+
+## [0.4.5] - 2025-10-20
+
+### Changed
+- Updated version to 0.4.5 for consistency
+- Minor fixes and improvements
 # Changelog
 
 ## [0.4.5] - 2025-10-20
