@@ -1,0 +1,39 @@
+# title: Proxmox MCP Docker Compose Configuration
+# author: PureGrain at SLA Ops, LLC
+# author_url: https://github.com/PureGrain
+# repo_url: https://github.com/PureGrain/ProxmoxEmCP
+# license: MIT
+# description: Docker Compose setup for Proxmox MCP Server deployment
+
+version: '3.8'
+
+services:
+  proxmox-mcp:
+    build: .
+    container_name: proxmox-emcp
+    restart: unless-stopped
+    environment:
+      # REQUIRED: Configure these with your Proxmox server details
+      - PROXMOX_HOST=${PROXMOX_HOST:-192.168.1.100}
+      - PROXMOX_TOKEN_NAME=${PROXMOX_TOKEN_NAME}
+      - PROXMOX_TOKEN_VALUE=${PROXMOX_TOKEN_VALUE}
+
+      # Optional configuration
+      - PROXMOX_USER=${PROXMOX_USER:-root@pam}
+      - PROXMOX_VERIFY_SSL=${PROXMOX_VERIFY_SSL:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+
+    # MCP uses stdio, so we need interactive mode
+    stdin_open: true
+    tty: true
+
+    # Optional: Mount logs to host
+    volumes:
+      - ./logs:/app/logs
+
+    # Optional: Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M

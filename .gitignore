@@ -1,9 +1,6 @@
-# title: Proxmox MCP Git Ignore Configuration
-# author: PureGrain at SLA Ops, LLC
-# author_url: https://github.com/PureGrain
-# repo_url: https://github.com/PureGrain/ProxmoxMCP
-# license: MIT
-# description: Git ignore patterns for Proxmox MCP Server project
+# Proxmox MCP Git Ignore Configuration
+# Author: PureGrain at SLA Ops, LLC
+# License: MIT
 
 # Environment configuration
 .env
@@ -64,11 +61,8 @@ temp/
 tmp/
 
 # Exclude additional test and utility scripts
-npm-app/check-version.js
-npm-app/update-version.js
 npm-app/test-*.js
 npm-app/*.spec.js
-
 npm-app/test-cli.js
 npm-app/test-server.js
 
@@ -102,7 +96,6 @@ npm-app/node_modules/
 .env.*
 
 # Workspace-wide exclusions
-
 tests/
 
 # Added exclusions for sensitive and unnecessary files

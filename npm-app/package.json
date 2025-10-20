@@ -1,0 +1,44 @@
+{
+  "name": "@puregrain/proxmox-emcp-node",
+  "version": "0.4.7",
+  "description": "Native Node.js ProxmoxEmCP server using Model Context Protocol for Proxmox VE management.",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "proxmox-emcp-node": "index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "PureGrain at SLA Ops, LLC",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.18.0",
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "proxmox",
+    "mcp",
+    "model-context-protocol",
+    "virtualization",
+    "api"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PureGrain/ProxmoxEmCP.git",
+    "directory": "packages/proxmox-emcp-node"
+  },
+  "bugs": {
+    "url": "https://github.com/PureGrain/ProxmoxEmCP/issues"
+  },
+  "homepage": "https://github.com/PureGrain/ProxmoxEmCP#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
