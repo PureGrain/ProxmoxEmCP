@@ -35,6 +35,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push multi-arch image with attestations
+        id: build-push
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -44,6 +45,13 @@ jobs:
           # Generate provenance and SBOM attestations
           provenance: mode=max
           sbom: true
+
+      - name: Attest Docker image
+        uses: ./.github/workflows/attest-build-provenance.yml
+        with:
+          subject-name: puregrain/proxmox-emcp:latest
+          subject-digest: ${{ steps.build-push.outputs.digest }}
+          push-to-registry: true
 
       # Docker Scout Analysis
       - name: Docker Scout CVE scan
