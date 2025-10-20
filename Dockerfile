@@ -5,34 +5,26 @@
 # license: MIT
 # description: Docker container for Proxmox MCP Server using official MCP SDK
 
-# Multi-stage build to optimize image size
+# Single-stage build for lightweight and secure builds
+FROM alpine:latest
 
-# Stage 1: Build
-FROM python:3.13-slim AS builder
+# Set working directory
 WORKDIR /app
 
-# Install build dependencies and Python packages
-RUN apt-get update && apt-get install -y gcc g++ && rm -rf /var/lib/apt/lists/*
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Install dependencies
+RUN apk update && apk add --no-cache python3 py3-pip
 
-# Stage 2: Runtime
-FROM gcr.io/distroless/python3
-WORKDIR /app
+# Copy application files
+COPY . /app
 
-# Copy built application from builder stage
-COPY --from=builder /app /app
+# Install Python dependencies
+RUN pip3 install -r requirements.txt
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1
-ENV LOG_LEVEL=INFO
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD python -c "import mcp; import proxmoxer; print('OK')" || exit 1
-
-# Run the MCP server
-CMD ["python3", "mcp_server_stdio.py"]
+# Run the application
+CMD ["python3", "mcp_server.py"]
 
 # Add OCI labels for attestation metadata
 LABEL org.opencontainers.image.title="Proxmox MCP Server"
