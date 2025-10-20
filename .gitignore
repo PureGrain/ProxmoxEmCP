@@ -97,7 +97,6 @@ npm-app/node_modules/
 
 # Git files
 .git/
-.github/
 
 # Environment files
 .env.*
