@@ -5,44 +5,44 @@
 # license: MIT
 # description: Docker container for Proxmox MCP Server using official MCP SDK
 
-FROM python:3.14-alpine
+# Multi-stage build to optimize image size
 
-# Create non-root user for security
-RUN addgroup -S mcp && adduser -S -G mcp -h /home/mcp mcp
-
-# Set working directory
+# Stage 1: Build
+FROM python:3.14-alpine as builder
 WORKDIR /app
 
-# Install system dependencies
-RUN apk update && apk add --no-cache \
-    gcc \
-    gcompat
-
-# Copy requirements and install Python packages
+# Install build dependencies and Python packages
+RUN apk update && apk add --no-cache gcc gcompat
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the MCP server (stdio version - primary)
-COPY mcp_server_stdio.py .
+# Stage 2: Runtime
+FROM alpine:latest
+WORKDIR /app
 
-# Change ownership to non-root user
-RUN chown -R mcp:mcp /app
+# Install runtime dependencies
+RUN apk update && apk add --no-cache python3 py3-pip && \
+    ln -sf python3 /usr/bin/python
 
-# Optional: Copy HTTP version for users who need it
-# COPY mcp_server_http.py .
+# Copy built application from builder stage
+COPY --from=builder /app /app
 
-# Set environment variables (can be overridden at runtime)
+# Create non-root user for security
+RUN addgroup -S mcp && adduser -S -G mcp -h /home/mcp mcp && \
+    chown -R mcp:mcp /app
+
+# Set environment variables
 ENV PYTHONUNBUFFERED=1
 ENV LOG_LEVEL=INFO
 
-# Health check (optional - checks if Python can import required modules)
+# Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD python -c "import mcp; import proxmoxer; print('OK')" || exit 1
 
 # Switch to non-root user
 USER mcp
 
-# Run the MCP server with stdio transport (default for MCP compatibility)
+# Run the MCP server
 CMD ["python", "mcp_server_stdio.py"]
 
 # Add supply chain attestation metadata
