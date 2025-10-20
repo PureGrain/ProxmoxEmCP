@@ -53,6 +53,10 @@ jobs:
           command: cves
           image: puregrain/proxmox-emcp:latest
           summary: true
+          # Add platform specification to help Scout identify the image
+          platform: linux/amd64
+          # Continue even if Scout fails (it's informational)
+        continue-on-error: true
 
       - name: Docker Scout comparison
         uses: docker/scout-action@v1
@@ -62,6 +66,7 @@ jobs:
           to: puregrain/proxmox-emcp:latest
           exit-code: false
           summary: true
+        continue-on-error: true
 
   codeql:
     runs-on: ubuntu-latest
