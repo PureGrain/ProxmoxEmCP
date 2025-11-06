@@ -2,7 +2,6 @@
 # author: PureGrain at SLA Ops, LLC
 # author_url: https://github.com/PureGrain
 # repo_url: https://github.com/PureGrain/ProxmoxMCP
-# sponsor_url: https://github.com/sponsors/PureGrain
 # license: MIT
 # description: Docker container for Proxmox MCP Server using official MCP SDK
 
