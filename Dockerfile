@@ -37,9 +37,20 @@ RUN apk update && apk add --no-cache python3 py3-pip \
     && adduser -u 1001 -S mcp -G mcp \
     && rm -rf /var/cache/apk/*
 
-# Install Docker Scout for CVE scanning (if needed in runtime)
-# Note: Consider if docker is actually needed in runtime
-RUN apk add --no-cache docker
+# Do NOT install Docker or containerd in the runtime image.
+# Installing Docker/containerd in the image can introduce container runtime
+# directories (e.g. /var/lib/containerd, /run/containerd/...) with
+# permissive mode bits which are picked up by scanners like Docker Scout.
+# Scanning and tools such as Docker Scout should run in CI, not in the runtime
+# container. Avoid shipping the containerd runtime in the image.
+
+# As a safety measure, if any containerd-related directories exist in the
+# build context or base image, set restrictive permissions (0700) so they do
+# not trigger overly-broad permission findings. This is intentionally
+# defensive — prefer removing the runtime packages entirely.
+RUN if [ -d /var/lib/containerd ]; then chmod 700 /var/lib/containerd || true; fi && \
+    if [ -d /run/containerd/io.containerd.grpc.v1.cri ]; then chmod 700 /run/containerd/io.containerd.grpc.v1.cri || true; fi && \
+    if [ -d /run/containerd/io.containerd.sandbox.controller.v1.shim ]; then chmod 700 /run/containerd/io.containerd.sandbox.controller.v1.shim || true; fi
 
 # Copy application files from builder stage
 COPY --from=builder /app /app
