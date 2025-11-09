@@ -54,7 +54,7 @@ jobs:
         uses: actions/attest-build-provenance@v1
         with:
           subject-name: index.docker.io/puregrain/proxmox-emcp
-          subject-digest: sha256:361f1539c7b778e50581e08d586b81e8dd4b3ff7ed71de6b512ac1114be692c3
+          subject-digest: ${{ steps.build-push.outputs.digest }}
           push-to-registry: true
           github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           show-summary: true
